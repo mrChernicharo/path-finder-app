@@ -1,67 +1,71 @@
 import { useState } from "react";
-import { useAppSelector } from "../redux/modules/util";
-import { getMapWidth, getMapHeight } from "../redux/modules/world-map.selector";
-
-export enum SelectionMode {
-  Idle = "Idle",
-  Active = "Active",
-}
+import { useAppDispatch, useAppSelector } from "../redux/modules/util";
+import {
+  getSelectionMode,
+  getNodes,
+} from "../redux/modules/world-map.selector";
+import { SelectionMode, worldMapActions } from "../redux/modules/world-map";
 
 export default function WorldMap() {
-  const width = useAppSelector(getMapWidth);
-  const height = useAppSelector(getMapHeight);
-  const [selectionMode, setSelectionMode] = useState(SelectionMode.Idle);
+  const nodesGrid = useAppSelector(getNodes);
+  const { setSelectionMode } = worldMapActions;
+  const dispatch = useAppDispatch();
 
   return (
     <div>
       <div>World Map</div>
+      <ul className="text-xs">
+        <li>- Press left btn to block nodes</li>
+        <li>- Press right btn to unblock nodes</li>
+      </ul>
 
       <div
         className="grid-outer-wrapper"
         onMouseDown={(e) => {
           (e.buttons === 1 || e.buttons === 2) &&
-            setSelectionMode(SelectionMode.Active);
+            dispatch(setSelectionMode(SelectionMode.Active));
         }}
         onMouseUp={(e) => {
-          setSelectionMode(SelectionMode.Idle);
+          dispatch(setSelectionMode(SelectionMode.Idle));
         }}
         onMouseLeave={(e) => {
-          setSelectionMode(SelectionMode.Idle);
+          dispatch(setSelectionMode(SelectionMode.Idle));
         }}
         onContextMenu={(e) => {
           e.preventDefault();
         }}
       >
-        {Array(height)
+        {nodesGrid.map((row, i) => (
+          <div key={i} className="flex">
+            {row.map((node, j) => (
+              <Node key={"" + i + j} row={node.y} col={node.x} />
+            ))}
+          </div>
+        ))}
+
+        {/* {Array(height)
           .fill(0)
           .map((_, i) => (
             <div key={`row-${i}`} className="flex">
               {Array(width)
                 .fill(0)
                 .map((_, j) => (
-                  <Node
-                    key={`row-${i}-col-${j}`}
-                    row={i}
-                    col={j}
-                    selectionMode={selectionMode}
-                  />
+                  <Node key={`row-${i}-col-${j}`} row={i} col={j} />
                 ))}
             </div>
-          ))}
+          ))} */}
       </div>
     </div>
   );
 }
 
-export function Node(props: {
-  row: number;
-  col: number;
-  selectionMode: SelectionMode;
-}) {
-  const { row, col, selectionMode } = props;
+export function Node(props: { row: number; col: number }) {
+  const { row, col } = props;
+  const selectionMode = useAppSelector(getSelectionMode);
+
   const [blocked, setBlocked] = useState(false);
 
-  const handleMouseEnter = (e: React.MouseEvent) => {
+  const onMouseOver = (e: React.MouseEvent) => {
     e.preventDefault();
 
     e.buttons === 1 &&
@@ -73,6 +77,12 @@ export function Node(props: {
       setBlocked(false);
   };
 
+  const onMouseDown = (e: React.MouseEvent) => {
+    e.buttons === 1 && setBlocked(true);
+
+    e.buttons === 2 && setBlocked(false);
+  };
+
   return (
     <div
       data-testid={`row-${row}-col-${col}`}
@@ -81,14 +91,8 @@ export function Node(props: {
           ? "bg-slate-300 hover:bg-slate-400"
           : "bg-slate-800 hover:bg-slate-700"
       }`}
-      onMouseOver={handleMouseEnter}
-      onMouseDown={(e) => {
-        e.buttons === 1 &&
-        setBlocked(true);
-
-        e.buttons === 2 &&
-        setBlocked(false);
-      }}
+      onMouseOver={onMouseOver}
+      onMouseDown={onMouseDown}
     >
       {row + 1}-{col + 1}
     </div>
