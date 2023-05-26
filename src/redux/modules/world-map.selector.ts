@@ -10,6 +10,10 @@ export const getMapHeight = createSelector(
   selectSelf,
   ({ worldMap }) => worldMap.height
 );
+export const getNodeSize = createSelector(
+  selectSelf,
+  ({ worldMap }) => worldMap.nodeSize
+);
 export const getSelectionMode = createSelector(
   selectSelf,
   ({ worldMap }) => worldMap.selectionMode
@@ -25,6 +29,6 @@ export const getRow = createSelector(
 );
 export const getNode = createSelector(
   getNodes,
-  (nodes: Node[][], coords: { row: number, col: number }) => coords,
+  (nodes: Node[][], coords: { row: number; col: number }) => coords,
   (nodes, { row, col }) => nodes[row][col]
 );

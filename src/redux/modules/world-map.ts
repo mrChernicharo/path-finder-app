@@ -14,6 +14,7 @@ export interface Node {
 export interface WorldMapState {
   width: number;
   height: number;
+  nodeSize: number;
   selectionMode: SelectionMode;
   nodes: Node[][];
 }
@@ -21,8 +22,9 @@ export interface WorldMapState {
 const initialState: WorldMapState = {
   width: 10,
   height: 10,
+  nodeSize: 16,
   selectionMode: SelectionMode.Idle,
-  nodes: calculateGrid(10, 10),
+  nodes: calculateGrid(40, 20),
 };
 
 export const worldMapSlice = createSlice({
@@ -36,6 +38,9 @@ export const worldMapSlice = createSlice({
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
       state.nodes = calculateGrid(state.width, state.height)
+    },
+    setNodeSize: (state, action: PayloadAction<number>) => {
+      state.nodeSize = action.payload;
     },
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
