@@ -4,6 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 export enum SelectionMode {
   Idle = "Idle",
   Active = "Active",
+  Dragging = "Dragging"
 }
 
 export interface Node {
