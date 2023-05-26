@@ -9,6 +9,18 @@ interface DraggableProps {
   children: ReactNode;
 }
 
+const ID_CHARS =
+	'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-';
+
+const idMaker = (length = 12) =>
+	Array(length)
+		.fill(0)
+		.map(item => ID_CHARS.split('')[
+			Math.round(Math.random() * ID_CHARS.length)
+		])
+		.join('');
+
+
 export default function Draggable(props: DraggableProps) {
   const { width, height, children } = props;
 
@@ -17,7 +29,7 @@ export default function Draggable(props: DraggableProps) {
       console.log('drag start');
     },
     dragCb(pos) {
-      console.log('dragging');
+      // console.log('dragging');
     },
     dragEndCb(pos) {
       console.log('drag ended');
@@ -25,7 +37,7 @@ export default function Draggable(props: DraggableProps) {
   });
 
   return (
-    <div className="absolute z-10 top-0 border border-solid" style={{ width, height }} ref={elementRef}>
+    <div id={idMaker()} className="absolute z-10 top-0 border border-solid" style={{ width, height }} ref={elementRef}>
       {children}
     </div>
   );
