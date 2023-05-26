@@ -1,12 +1,13 @@
 import { useAppSelector, useAppDispatch } from '../redux/modules/util';
 import { worldMapActions } from '../redux/modules/world-map';
-import { getMapWidth, getMapHeight, getNodeSize } from '../redux/modules/world-map.selector';
+import { getMapWidth, getMapHeight, getNodeSize, getNodes } from '../redux/modules/world-map.selector';
 import { MIN_WIDTH, MAX_WIDTH, MIN_HEIGHT, MAX_HEIGHT, MIN_NODE_SIZE, MAX_NODE_SIZE } from '../utils/constants';
 
 export default function SettingsPane() {
   const width = useAppSelector(getMapWidth);
   const height = useAppSelector(getMapHeight);
   const nodeSize = useAppSelector(getNodeSize);
+  const nodes = useAppSelector(getNodes);
   const dispatch = useAppDispatch();
 
   const { setWidth, setHeight, setNodeSize } = worldMapActions;
@@ -59,6 +60,9 @@ export default function SettingsPane() {
         />
         <span>{nodeSize}</span>
       </div>
+
+
+      {/* <button onClick={() => generatePath()}>Generate Path!</button> */}
     </div>
   );
 }

@@ -5,3 +5,9 @@ export const idMaker = (length = 12) =>
     .fill(0)
     .map((item) => ID_CHARS.split('')[Math.round(Math.random() * ID_CHARS.length)])
     .join('');
+
+
+
+export function generatePath(grid: Node[][], start: Node, end: Node) {
+
+}    

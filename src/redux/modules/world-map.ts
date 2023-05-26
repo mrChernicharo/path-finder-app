@@ -19,6 +19,8 @@ export interface WorldMapState {
   nodeSize: number;
   selectionMode: SelectionMode;
   nodes: Node[][];
+  start: Node;
+  end: Node;
 }
 
 const initialState: WorldMapState = {
@@ -27,6 +29,8 @@ const initialState: WorldMapState = {
   nodeSize: 24,
   selectionMode: SelectionMode.Idle,
   nodes: calculateGrid(40, 20),
+  start: { x: 3, y: 2, blocked: false },
+  end: { x: 32, y: 16, blocked: false },
 };
 
 export const worldMapSlice = createSlice({

@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../redux/modules/util';
-import { getNodeSize, getNodes, getSelectionMode } from '../redux/modules/world-map.selector';
+import { getNodeSize, getNodes, getSelectionMode, getStartNode, getEndNode } from '../redux/modules/world-map.selector';
 import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
 import { Node } from './Node';
 import Draggable from './Draggable';
@@ -8,6 +8,8 @@ import DestinationPoint from './DestinationPoint';
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
   const selectionMode = useAppSelector(getSelectionMode);
+  const startNode = useAppSelector(getStartNode);
+  const endNode = useAppSelector(getEndNode);
   const { setSelectionMode } = worldMapActions;
 
   const dispatch = useAppDispatch();
@@ -42,8 +44,8 @@ export default function WorldMap() {
           </div>
         ))}
 
-        <DestinationPoint type="start" initialPos={{ x: 2, y: 2 }} />
-        <DestinationPoint type="end" initialPos={{ x: 32, y: 15 }} />
+        <DestinationPoint type="start" initialPos={startNode} />
+        <DestinationPoint type="end" initialPos={endNode} />
       </div>
     </div>
   );
