@@ -10,6 +10,7 @@ export enum SelectionMode {
 export interface Node {
   x: number;
   y: number;
+  blocked: boolean;
 }
 
 export interface WorldMapState {
@@ -46,6 +47,10 @@ export const worldMapSlice = createSlice({
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
     },
+    setNodeBlock: (state, action: PayloadAction<Node>) => {
+      const { x, y, blocked } = action.payload
+      state.nodes[y][x].blocked = blocked;
+    }
   },
 });
 
@@ -64,6 +69,7 @@ function calculateGrid(w: number, h: number) {
       grid[i][j] = {
         x: j,
         y: i,
+        blocked: false
       };
     }
   }

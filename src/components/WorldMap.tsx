@@ -3,6 +3,7 @@ import { getNodeSize, getNodes, getSelectionMode } from '../redux/modules/world-
 import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
 import { Node } from './Node';
 import Draggable from './Draggable';
+import DestinationPoint from './DestinationPoint';
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
@@ -36,7 +37,7 @@ export default function WorldMap() {
         {nodesGrid.map((row, i) => (
           <div key={i} className="flex">
             {row.map((node, j) => (
-              <Node key={'' + i + j} row={node.y} col={node.x} />
+              <Node key={'' + i + j} row={node.y} col={node.x} blocked={node.blocked} />
             ))}
           </div>
         ))}
@@ -45,26 +46,5 @@ export default function WorldMap() {
         <DestinationPoint type="end" initialPos={{ x: 32, y: 15 }} />
       </div>
     </div>
-  );
-}
-
-export function DestinationPoint(props: { type: 'start' | 'end'; initialPos: { x: number; y: number } }) {
-  const {
-    type,
-    initialPos: { x, y },
-  } = props;
-  const nodeSize = useAppSelector(getNodeSize);
-
-  return (
-    <Draggable width={nodeSize} height={nodeSize} initialPos={{ x: x * nodeSize, y: y * nodeSize }}>
-      <div
-        className={`${type === 'start' ? 'bg-green-500' : 'bg-red-500'} hover:cursor-grab`}
-        style={{
-          width: nodeSize,
-          height: nodeSize,
-          clipPath: `polygon(50% 0%, 66% 31%, 98% 35%, 72% 59%, 79% 91%, 50% 73%, 21% 91%, 27% 58%, 2% 35%, 34% 30%)`,
-        }}
-      />
-    </Draggable>
   );
 }
