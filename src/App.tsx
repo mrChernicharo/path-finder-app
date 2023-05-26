@@ -1,9 +1,11 @@
-import SettingsPane from "./components/SettingsPane";
-import WorldMap from "./components/WorldMap";
+import SettingsPane from './components/SettingsPane';
+import WorldMap from './components/WorldMap';
+import { useDrag } from './components/useDrag';
 
 function App() {
+
   return (
-    <div className="App">
+    <div >
       <h1>Path finder</h1>
       <SettingsPane />
       <WorldMap />

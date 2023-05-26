@@ -1,6 +1,6 @@
-import { useAppSelector, useAppDispatch } from "../redux/modules/util";
-import { worldMapActions } from "../redux/modules/world-map";
-import { getMapWidth, getMapHeight, getNodeSize } from "../redux/modules/world-map.selector";
+import { useAppSelector, useAppDispatch } from '../redux/modules/util';
+import { worldMapActions } from '../redux/modules/world-map';
+import { getMapWidth, getMapHeight, getNodeSize } from '../redux/modules/world-map.selector';
 
 export const MAX_WIDTH = 100;
 export const MIN_WIDTH = 5;

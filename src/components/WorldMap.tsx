@@ -1,17 +1,25 @@
-import { useAppDispatch, useAppSelector } from "../redux/modules/util";
-import {
-  getNodes,
-} from "../redux/modules/world-map.selector";
-import { SelectionMode, worldMapActions } from "../redux/modules/world-map";
-import { Node } from "./Node";
+import { useAppDispatch, useAppSelector } from '../redux/modules/util';
+import { getNodeSize, getNodes } from '../redux/modules/world-map.selector';
+import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
+import { Node } from './Node';
+import { ReactNode } from 'react';
+import Draggable from './Draggable';
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
+  const nodeSize = useAppSelector(getNodeSize);
   const { setSelectionMode } = worldMapActions;
   const dispatch = useAppDispatch();
 
   return (
     <div>
+      <Draggable>
+        <div className="bg-green-500" style={{ width: nodeSize, height: nodeSize }} />
+      </Draggable>
+
+      <Draggable>
+        <div className="bg-red-500" style={{ width: nodeSize, height: nodeSize }} />
+      </Draggable>
       <div>World Map</div>
       <ul className="text-xs">
         <li>- Press left btn to block nodes</li>
@@ -19,15 +27,11 @@ export default function WorldMap() {
       </ul>
 
       <div
-        className="grid-outer-wrapper"
+        className="grid-outer-wrapper relative"
         onMouseDown={(e) => {
-          (e.buttons === 1 || e.buttons === 2) &&
-            dispatch(setSelectionMode(SelectionMode.Active));
+          (e.buttons === 1 || e.buttons === 2) && dispatch(setSelectionMode(SelectionMode.Active));
         }}
         onMouseUp={(e) => {
-          dispatch(setSelectionMode(SelectionMode.Idle));
-        }}
-        onMouseLeave={(e) => {
           dispatch(setSelectionMode(SelectionMode.Idle));
         }}
         onContextMenu={(e) => {
@@ -37,14 +41,11 @@ export default function WorldMap() {
         {nodesGrid.map((row, i) => (
           <div key={i} className="flex">
             {row.map((node, j) => (
-              <Node key={"" + i + j} row={node.y} col={node.x} />
+              <Node key={'' + i + j} row={node.y} col={node.x} />
             ))}
           </div>
         ))}
-
-        {/* <div className=""></div> */}
       </div>
     </div>
   );
 }
-

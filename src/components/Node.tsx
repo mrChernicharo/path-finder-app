@@ -1,11 +1,7 @@
-import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../redux/modules/util";
-import {
-  getSelectionMode,
-  getNodes,
-  getNodeSize,
-} from "../redux/modules/world-map.selector";
-import { SelectionMode, worldMapActions } from "../redux/modules/world-map";
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/modules/util';
+import { getSelectionMode, getNodes, getNodeSize } from '../redux/modules/world-map.selector';
+import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
 
 export function Node(props: { row: number; col: number }) {
   const { row, col } = props;
@@ -17,13 +13,9 @@ export function Node(props: { row: number; col: number }) {
   const onMouseOver = (e: React.MouseEvent) => {
     e.preventDefault();
 
-    e.buttons === 1 &&
-      selectionMode === SelectionMode.Active &&
-      setBlocked(true);
+    e.buttons === 1 && selectionMode === SelectionMode.Active && setBlocked(true);
 
-    e.buttons === 2 &&
-      selectionMode === SelectionMode.Active &&
-      setBlocked(false);
+    e.buttons === 2 && selectionMode === SelectionMode.Active && setBlocked(false);
   };
 
   const onMouseDown = (e: React.MouseEvent) => {
@@ -35,7 +27,7 @@ export function Node(props: { row: number; col: number }) {
   return (
     <div
       // prettier-ignore
-      className={`row-${row} col-${col} ${blocked ? "bg-slate-300 hover:bg-slate-400" : "bg-slate-800 hover:bg-slate-700"} flex gap-2 justify-center items-center border-solid border text-[6px] select-none`}
+      className={`row-${row} col-${col} ${blocked ? "bg-slate-300 hover:bg-slate-400" : "bg-slate-800 hover:bg-slate-700"} flex gap-2 justify-center items-center border-dashed border text-[6px] select-none`}
       data-testid={`row-${row}-col-${col}`}
       style={{ width: nodeSize, height: nodeSize }}
       onMouseOver={onMouseOver}
