@@ -2,7 +2,6 @@ import { useAppDispatch, useAppSelector } from '../redux/modules/util';
 import { getNodeSize, getNodes } from '../redux/modules/world-map.selector';
 import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
 import { Node } from './Node';
-import { ReactNode } from 'react';
 import Draggable from './Draggable';
 
 export default function WorldMap() {
@@ -13,13 +12,6 @@ export default function WorldMap() {
 
   return (
     <div>
-      <Draggable>
-        <div className="bg-green-500" style={{ width: nodeSize, height: nodeSize }} />
-      </Draggable>
-
-      <Draggable>
-        <div className="bg-red-500" style={{ width: nodeSize, height: nodeSize }} />
-      </Draggable>
       <div>World Map</div>
       <ul className="text-xs">
         <li>- Press left btn to block nodes</li>
@@ -38,6 +30,10 @@ export default function WorldMap() {
           e.preventDefault();
         }}
       >
+        <Draggable width={nodeSize} height={nodeSize}>
+          <div className="bg-green-500" style={{ width: nodeSize, height: nodeSize }} />
+        </Draggable>
+
         {nodesGrid.map((row, i) => (
           <div key={i} className="flex">
             {row.map((node, j) => (
@@ -45,6 +41,10 @@ export default function WorldMap() {
             ))}
           </div>
         ))}
+
+        <Draggable width={nodeSize} height={nodeSize}>
+          <div className="bg-red-500" style={{ width: nodeSize, height: nodeSize }} />
+        </Draggable>
       </div>
     </div>
   );

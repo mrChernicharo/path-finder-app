@@ -8,22 +8,36 @@ export function useDrag(props: {
 }) {
   const { elementRef, dragStartCb, dragCb, dragEndCb } = props;
   const dragging = useRef(false);
+  const offset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const lastPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const onDragStart = (e: MouseEvent) => {
-    if (e.buttons === 1) {
+    if (e.buttons === 1 && elementRef.current) {
       dragging.current = true;
-      dragStartCb({ x: e.clientX, y: e.clientY });
+
+      const [prevX, prevY] = (elementRef.current.style.transform.match(/(\d|-|\.)+/g) || [0, 0]).map(Number);
+      lastPos.current = { x: prevX, y: prevY };
+      offset.current = { x: e.x, y: e.y };
+      
+      dragStartCb();
     }
   };
   const onDrag = (e: MouseEvent) => {
-    if (dragging.current) {
-      dragCb({ x: e.clientX, y: e.clientY });
+    if (dragging.current && elementRef.current) {
+      elementRef.current.style.transform = `translate(
+        ${lastPos.current.x + e.x - offset.current.x}px, 
+        ${lastPos.current.y + e.y - offset.current.y}px
+      )`;
+
+      console.log(elementRef.current.style.transform);
+      dragCb();
     }
   };
 
   const onDragEnd = (e: MouseEvent) => {
     dragging.current = false;
-    dragEndCb({ x: e.clientX, y: e.clientY });
+    offset.current = { x: e.x, y: e.y };
+    dragEndCb();
   };
 
   useEffect(() => {
