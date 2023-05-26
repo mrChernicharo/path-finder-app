@@ -1,7 +1,8 @@
 import { ReactNode, useCallback, useEffect, useRef, useState, RefObject } from 'react';
-import { useDrag } from './useDrag';
+import { useDrag } from '../hooks/useDrag';
 import { useAppSelector } from '../redux/modules/util';
 import { getNodes } from '../redux/modules/world-map.selector';
+import { idMaker } from '../utils/helpers';
 
 interface DraggableProps {
   width: number;
@@ -10,13 +11,7 @@ interface DraggableProps {
   children: ReactNode;
 }
 
-const ID_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-';
 
-const idMaker = (length = 12) =>
-  Array(length)
-    .fill(0)
-    .map((item) => ID_CHARS.split('')[Math.round(Math.random() * ID_CHARS.length)])
-    .join('');
 
 export default function Draggable(props: DraggableProps) {
   const {

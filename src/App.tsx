@@ -1,6 +1,6 @@
 import SettingsPane from './components/SettingsPane';
 import WorldMap from './components/WorldMap';
-import { useDrag } from './components/useDrag';
+import { useDrag } from './hooks/useDrag';
 
 function App() {
 

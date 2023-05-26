@@ -1,13 +1,7 @@
 import { useAppSelector, useAppDispatch } from '../redux/modules/util';
 import { worldMapActions } from '../redux/modules/world-map';
 import { getMapWidth, getMapHeight, getNodeSize } from '../redux/modules/world-map.selector';
-
-export const MAX_WIDTH = 100;
-export const MIN_WIDTH = 5;
-export const MAX_HEIGHT = 50;
-export const MIN_HEIGHT = 5;
-export const MIN_NODE_SIZE = 5;
-export const MAX_NODE_SIZE = 50;
+import { MIN_WIDTH, MAX_WIDTH, MIN_HEIGHT, MAX_HEIGHT, MIN_NODE_SIZE, MAX_NODE_SIZE } from '../utils/constants';
 
 export default function SettingsPane() {
   const width = useAppSelector(getMapWidth);
