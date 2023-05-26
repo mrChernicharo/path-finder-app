@@ -1,5 +1,7 @@
 import { ReactNode, useCallback, useEffect, useRef, useState, RefObject } from 'react';
 import { useDrag } from './useDrag';
+import { useAppSelector } from '../redux/modules/util';
+import { getNodes } from '../redux/modules/world-map.selector';
 
 interface DraggableProps {
   width: number;
@@ -9,10 +11,8 @@ interface DraggableProps {
 
 export default function Draggable(props: DraggableProps) {
   const { width, height, children } = props;
-  const divRef = useRef<HTMLDivElement>(null);
 
-  useDrag({
-    elementRef: divRef,
+  const { elementRef } = useDrag({
     dragStartCb(pos) {
       console.log('drag start');
     },
@@ -25,7 +25,7 @@ export default function Draggable(props: DraggableProps) {
   });
 
   return (
-    <div className="border border-solid" style={{ width, height }} ref={divRef}>
+    <div className="absolute z-10 top-0 border border-solid" style={{ width, height }} ref={elementRef}>
       {children}
     </div>
   );

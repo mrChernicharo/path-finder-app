@@ -22,7 +22,7 @@ export interface WorldMapState {
 const initialState: WorldMapState = {
   width: 10,
   height: 10,
-  nodeSize: 16,
+  nodeSize: 24,
   selectionMode: SelectionMode.Idle,
   nodes: calculateGrid(40, 20),
 };

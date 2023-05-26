@@ -30,10 +30,6 @@ export default function WorldMap() {
           e.preventDefault();
         }}
       >
-        <Draggable width={nodeSize} height={nodeSize}>
-          <div className="bg-green-500" style={{ width: nodeSize, height: nodeSize }} />
-        </Draggable>
-
         {nodesGrid.map((row, i) => (
           <div key={i} className="flex">
             {row.map((node, j) => (
@@ -42,6 +38,9 @@ export default function WorldMap() {
           </div>
         ))}
 
+        <Draggable width={nodeSize} height={nodeSize}>
+          <div className="bg-green-500" style={{ width: nodeSize, height: nodeSize }} />
+        </Draggable>
         <Draggable width={nodeSize} height={nodeSize}>
           <div className="bg-red-500" style={{ width: nodeSize, height: nodeSize }} />
         </Draggable>

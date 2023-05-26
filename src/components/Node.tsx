@@ -27,13 +27,15 @@ export function Node(props: { row: number; col: number }) {
   return (
     <div
       // prettier-ignore
-      className={`row-${row} col-${col} ${blocked ? "bg-slate-300 hover:bg-slate-400" : "bg-slate-800 hover:bg-slate-700"} flex gap-2 justify-center items-center border-dashed border text-[6px] select-none`}
+      className={`node row-${row} col-${col} ${blocked ? "bg-slate-300 hover:bg-slate-400" : "bg-slate-800 hover:bg-slate-700"} flex gap-2 justify-center items-center border-dashed border text-[6px]`}
       data-testid={`row-${row}-col-${col}`}
       style={{ width: nodeSize, height: nodeSize }}
       onMouseOver={onMouseOver}
       onMouseDown={onMouseDown}
     >
-      {row + 1}-{col + 1}
+      <span className="select-none">
+        {row + 1}-{col + 1}
+      </span>
     </div>
   );
 }
