@@ -1,29 +1,30 @@
-import { useAppSelector } from '../redux/modules/util';
-import { Pos } from '../redux/modules/world-map';
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/modules/util';
+import { Pos, worldMapActions } from '../redux/modules/world-map';
 import { getNodeSize } from '../redux/modules/world-map.selector';
 import Draggable from './Draggable';
 
-export default function DestinationPoint(props: { type: 'start' | 'end'; initialPos: Pos }) {
-  const {
-    type,
-    initialPos: { x, y },
-  } = props;
+export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Pos }) {
+  const [pos, setPos] = useState(props.pos);
+
   const nodeSize = useAppSelector(getNodeSize);
+  const dispatch = useAppDispatch();
+  const { setStart, setEnd } = worldMapActions;
 
   return (
     <Draggable
       width={nodeSize}
       height={nodeSize}
-      initialPos={{ x: x * nodeSize, y: y * nodeSize }}
+      initialPos={{ x: pos.x * nodeSize, y: pos.y * nodeSize }}
       onDragEnd={(pos) => {
-        console.log(
-          'onDragEnd',
-          pos,
-        );
+        console.log('dragEnd', props.type, pos);
+        setPos(pos);
+        if (props.type === 'start') dispatch(setStart(pos));
+        if (props.type === 'end') dispatch(setEnd(pos));
       }}
     >
       <div
-        className={`${type === 'start' ? 'bg-green-500' : 'bg-red-500'} hover:cursor-grab`}
+        className={`${props.type === 'start' ? 'bg-green-500' : 'bg-red-500'} hover:cursor-grab`}
         style={{
           width: nodeSize,
           height: nodeSize,

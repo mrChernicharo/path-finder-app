@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../redux/modules/util';
 import { getNodeSize, getNodes, getSelectionMode, getStartNode, getEndNode } from '../redux/modules/world-map.selector';
-import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
+import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map';
 import { Node } from './Node';
 import Draggable from './Draggable';
 import DestinationPoint from './DestinationPoint';
@@ -46,8 +46,8 @@ export default function WorldMap() {
           </div>
         ))}
 
-        <DestinationPoint type="start" initialPos={startNode} />
-        <DestinationPoint type="end" initialPos={endNode} />
+        <DestinationPoint type="start" pos={startNode} />
+        <DestinationPoint type="end" pos={endNode} />
 
         <GeneratedPath />
       </div>
@@ -59,17 +59,22 @@ export function GeneratedPath() {
   const nodesGrid = useAppSelector(getNodes);
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
+  const nodeSize = useAppSelector(getNodeSize);
 
-  const path = generatePath(nodesGrid, startNode, endNode).map((point) => ({ x: point.x, y: point.y }));
+  const [path, setPath] = useState<Pos[]>([]);
 
+  useEffect(() => {
+    setPath(generatePath(nodesGrid, startNode, endNode).map((point) => ({ x: point.x, y: point.y })));
+  }, [nodesGrid, startNode, endNode]);
 
   return (
     <div>
-      {path.map((point) => (
-        <div key={`${point.x} ${point.y}`}>
-          x: {point.x} &nbsp;
-          y: {point.y}
-        </div>
+      {path.map(({ x, y }) => (
+        <div
+          key={`${x} ${y}`}
+          className="absolute bg-green-400 z-0"
+          style={{ top: y * nodeSize, left: x * nodeSize, width: nodeSize, height: nodeSize }}
+        ></div>
       ))}
     </div>
   );

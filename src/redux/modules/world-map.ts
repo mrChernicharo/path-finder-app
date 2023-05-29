@@ -69,6 +69,12 @@ export const worldMapSlice = createSlice({
       const { x, y, blocked } = action.payload;
       state.nodes[y][x] = { ...state.nodes[y][x], blocked };
     },
+    setStart: (state, action: PayloadAction<Pos>) => {
+      state.start = action.payload;
+    },
+    setEnd: (state, action: PayloadAction<Pos>) => {
+      state.end = action.payload;
+    }
   },
 });
 
