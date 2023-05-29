@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { END_POS, INITIAL_HEIGHT, INITIAL_WIDTH, START_POS } from "../../utils/constants";
+import { GridPoint } from "../../utils/helpers";
 
 export interface Pos {
   x: number;
@@ -14,8 +15,8 @@ export interface Node {
   f: number;
   g: number;
   h: number;
-  neighbors?: Node[];
-  parent?: Node;
+  // neighbors?: Node[];
+  // parent?: Node;
   isStart?: boolean;
   isEnd?: boolean;
   visited?: boolean;
@@ -67,27 +68,41 @@ export const worldMapSlice = createSlice({
     updateNodes: (
       state,
       action: PayloadAction<{
-        openSet: Node[];
-        current: Node;
-        closedSet: Node[];
-        neighbors: Node[];
-        path: Node[];
+        openSet: GridPoint[];
+        current: GridPoint;
+        closedSet: GridPoint[];
+        neighbors: GridPoint[];
+        path: GridPoint[];
       }>
     ) => {
       // state.currentNode =
       console.log(action.payload);
       const { closedSet, openSet, current, neighbors, path } = action.payload;
-      state.currentNode = current;
-      state.closedSet = closedSet;
-      state.openSet = openSet;
+      const { neighbors: n, parent, ...serializedCurrNode } = current;
 
-      for (const node of [current, ...neighbors]) {
-        console.log({
-          node,
-          atPos: state.grid[node.y][node.x],
-          grid: state.grid.map((r) => r.map((c) => ({ ...c }))),
-        });
-        state.grid[node.y][node.x] = { ...state.grid[node.y][node.x], ...node };
+      state.currentNode = serializedCurrNode;
+
+      state.closedSet = closedSet.map((n) => {
+        const { neighbors, parent, ...currentNode } = n;
+        return currentNode;
+      });
+      state.openSet = openSet.map((n) => {
+        const { neighbors, parent, ...currentNode } = n;
+        return currentNode;
+      });
+
+      const serializedNeighbors = current.neighbors.map((n) => {
+        const { neighbors, parent, ...currentNode } = n;
+        return currentNode;
+      });
+
+      for (const node of [serializedCurrNode, ...serializedNeighbors]) {
+        // console.log({
+        //   node,
+        //   atPos: { ...state.grid[node.y][node.x] },
+        //   grid: state.grid.map((r) => r.map((c) => ({ ...c }))),
+        // });
+        // state.grid[node.y][node.x] = { ...state.grid[node.y][node.x], ...node };
       }
     },
   },
@@ -121,9 +136,7 @@ export function createInitialGrid(w: number, h: number, startPos: Pos, endPos: P
         f,
         g,
         h,
-        blocked: false,
-        neighbors: [],
-        parent: undefined,
+        blocked: Math.random() > 0.95 ? true : false,
         isStart: pos.x === startPos.x && pos.y === startPos.y,
         isEnd: pos.x === endPos.x && pos.y === endPos.y,
       };

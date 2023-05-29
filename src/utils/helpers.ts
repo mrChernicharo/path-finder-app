@@ -5,9 +5,7 @@ const ID_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
 export const idMaker = (length = 12) =>
   Array(length)
     .fill(0)
-    .map(
-      (item) => ID_CHARS.split("")[Math.round(Math.random() * ID_CHARS.length)]
-    )
+    .map((item) => ID_CHARS.split("")[Math.round(Math.random() * ID_CHARS.length)])
     .join("");
 
 //heuristic we will be using - Manhattan distance
@@ -20,7 +18,7 @@ function heuristic(pos0: Pos, pos1: Pos) {
 }
 
 //constructor function to create all the grid points as objects containind the data for the points
-class GridPoint {
+export class GridPoint {
   x: number;
   y: number;
   f: number;
@@ -42,8 +40,8 @@ class GridPoint {
 
   // update neighbors array for a given grid point
   updateNeighbors(grid: GridPoint[][]) {
-    let i = this.x;
-    let j = this.y;
+    let i = this.y;
+    let j = this.x;
     if (i < grid.length - 1) {
       this.neighbors.push(grid[i + 1][j]);
     }
@@ -64,26 +62,27 @@ export function* pathGenerator(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     const grid: GridPoint[][] = [];
     const [cols, rows] = [nodeGrid[0].length, nodeGrid.length];
 
-    for (let i = 0; i < cols; i++) {
-      grid[i] = new Array(rows);
+    for (let i = 0; i < rows; i++) {
+      grid[i] = new Array(cols);
     }
 
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < rows; j++) {
-        grid[i][j] = new GridPoint(i, j);
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        grid[i][j] = new GridPoint(j, i);
       }
     }
 
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
         grid[i][j].updateNeighbors(grid);
       }
     }
 
-    const start = grid[startPos.y][startPos.x];
+    console.log({ grid });
+
     const end = grid[endPos.y][endPos.x];
 
-    let openSet: GridPoint[] = [start];
+    let openSet: GridPoint[] = [grid[startPos.y][startPos.x]];
     let closedSet: GridPoint[] = [];
     const path: GridPoint[] = [];
 
@@ -108,7 +107,13 @@ export function* pathGenerator(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
         console.log("DONE!");
         // return the traced path
         // return path.reverse();
-        yield { current, neighbors: [], openSet, closedSet, path: path.reverse() };
+        yield {
+          current: { ...current },
+          neighbors: [],
+          openSet: [...openSet],
+          closedSet: [...closedSet],
+          path: path.reverse(),
+        };
       }
 
       //remove current from openSet
@@ -120,14 +125,16 @@ export function* pathGenerator(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 
       let neighbors = current.neighbors;
 
+      console.log({ current, neighbors });
       for (let i = 0; i < neighbors.length; i++) {
         let neighbor = neighbors[i];
+        if (neighbor.blocked) continue;
 
         if (!closedSet.includes(neighbor)) {
           let possibleG = current.g + 1;
 
           if (!openSet.includes(neighbor)) {
-            openSet.push(neighbor);
+            openSet = [...openSet, current];
           } else if (possibleG >= neighbor.g) {
             continue;
           }
@@ -138,11 +145,17 @@ export function* pathGenerator(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
           neighbor.parent = current;
         }
       }
-      yield { current, neighbors, openSet, closedSet, path: [] };
+      yield {
+        current: { ...current },
+        neighbors: [...neighbors],
+        openSet: [...openSet],
+        closedSet: [...closedSet],
+        path: [],
+      };
     }
 
     //no solution by default
-    yield { current: null, neighbors: [], openSet, closedSet, path: [] };
+    yield { current: null, neighbors: [], openSet: [...openSet], closedSet: [...closedSet], path: [] };
   } catch (err) {
     console.warn(err);
     yield { current: null, neighbors: [], openSet: [], closedSet: [], path: [] };
