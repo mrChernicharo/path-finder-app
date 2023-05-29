@@ -33,12 +33,17 @@ export const getNode = createSelector(
   (nodes, { row, col }) => nodes[row][col]
 );
 
-
 export const getStartPos = createSelector(
   selectSelf,
   ({ worldMap }) => worldMap.startPos
 );
+export const getStartNode = createSelector(selectSelf, ({ worldMap }) => {
+  return worldMap.nodes[worldMap.startPos.y][worldMap.startPos.x];
+});
 export const getEndPos = createSelector(
   selectSelf,
   ({ worldMap }) => worldMap.endPos
 );
+export const getEndNode = createSelector(selectSelf, ({ worldMap }) => {
+  return worldMap.nodes[worldMap.endPos.y][worldMap.endPos.x];
+});

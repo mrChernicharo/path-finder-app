@@ -1,7 +1,9 @@
 import { useAppDispatch, useAppSelector } from "../redux/modules/util";
 import {
+  getEndNode,
   getEndPos,
   getNodes,
+  getStartNode,
   getStartPos,
 } from "../redux/modules/world-map.selector";
 import {
@@ -11,15 +13,24 @@ import {
   worldMapActions,
 } from "../redux/modules/world-map";
 import Node from "./Node";
-import { determineNeighbors, heuristic } from "../util/helpers";
+import {
+  determineNeighbors,
+  generateAStarPath,
+  getProcessedNodes,
+  heuristic,
+  runAStar,
+} from "../util/helpers";
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
   const startPos = useAppSelector(getStartPos);
   const endPos = useAppSelector(getEndPos);
-  const { setSelectionMode } = worldMapActions;
+  const startNode = useAppSelector(getStartNode);
+  const endNode = useAppSelector(getEndNode);
+  const { setSelectionMode, updateNode } = worldMapActions;
 
   const dispatch = useAppDispatch();
+
 
   return (
     <div>
@@ -28,6 +39,21 @@ export default function WorldMap() {
         <li>• Press left btn to block nodes</li>
         <li>• Press right btn to unblock nodes</li>
       </ul>
+
+      <button
+        onClick={() => {
+          const result = runAStar(startNode, endNode);
+          const { current, neighbors, path, openSet, closedSet } =
+            result.value as any;
+          console.log({ neighbors, current });
+
+          for (const node of [current, ...neighbors]) {
+            dispatch(updateNode(node));
+          }
+        }}
+      >
+        Run
+      </button>
 
       <div
         className="grid-outer-wrapper"
@@ -45,7 +71,7 @@ export default function WorldMap() {
           e.preventDefault();
         }}
       >
-        {getProcessedNodes(nodesGrid, startPos, endPos).map((row, i, grid) => (
+        {nodesGrid.map((row, i, grid) => (
           <div key={i} className="flex">
             {row.map((node, j) => {
               const isStart = node.x === startPos.x && node.y === startPos.y;
@@ -65,30 +91,4 @@ export default function WorldMap() {
       </div>
     </div>
   );
-}
-
-export function getProcessedNodes(
-  grid: GridNode[][],
-  startPos: Pos,
-  endPos: Pos
-) {
-  const nodesGrid: GridNode[][] = [];
-
-  for (let row = 0; row < grid.length; row++) {
-    nodesGrid[row] = [];
-    for (let col = 0; col < grid[0].length; col++) {
-      const node = { ...grid[row][col] };
-      const pos = { x: node.x, y: node.y };
-
-      const h = heuristic(pos, endPos);
-      const g = heuristic(startPos, pos);
-      const f = h + g;
-      const neighbors = determineNeighbors(pos, grid);
-
-      const processedNode: GridNode = { ...node, h, g, f, neighbors };
-      nodesGrid[row][col] = processedNode;
-    }
-  }
-
-  return nodesGrid;
 }

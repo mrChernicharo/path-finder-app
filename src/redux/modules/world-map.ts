@@ -7,7 +7,7 @@ import {
   START_POS,
   END_POS,
 } from "../../util/constants";
-import { createGrid } from "../../util/helpers";
+import { createGrid, getProcessedNodes } from "../../util/helpers";
 
 export enum SelectionMode {
   Idle = "Idle",
@@ -27,6 +27,7 @@ export interface GridNode {
   g: number; // cost from start to current point
   blocked: boolean;
   neighbors: GridNode[];
+  parent: GridNode | undefined;
 }
 
 export interface WorldMapState {
@@ -43,7 +44,7 @@ const initialState: WorldMapState = {
   width: INITIAL_WIDTH,
   height: INITIAL_HEIGHT,
   nodeSize: INITIAL_CELL_SIZE,
-  nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
+  nodes:  getProcessedNodes(createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),  START_POS, END_POS),
   selectionMode: SelectionMode.Idle,
   startPos: START_POS,
   endPos: END_POS,
@@ -55,11 +56,11 @@ export const worldMapSlice = createSlice({
   reducers: {
     setWidth: (state, action: PayloadAction<number>) => {
       state.width = action.payload;
-      state.nodes = createGrid(state.width, state.height);
+      state.nodes = getProcessedNodes(createGrid(state.width, state.height), state.startPos, state.endPos)
     },
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
-      state.nodes = createGrid(state.width, state.height);
+      state.nodes = getProcessedNodes(createGrid(state.width, state.height), state.startPos, state.endPos)
     },
     setNodeSize: (state, action: PayloadAction<number>) => {
       state.nodeSize = action.payload;
