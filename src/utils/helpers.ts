@@ -70,6 +70,7 @@ class GridPoint {
 
 export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
   try {
+    // initialize grid
     const grid: GridPoint[][] = [];
     const [cols, rows] = [nodeGrid[0].length, nodeGrid.length];
 
@@ -91,6 +92,8 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 
     const start = grid[startPos.x][startPos.y];
     const end = grid[endPos.x][endPos.y];
+
+    
 
     let openSet: GridPoint[] = [start];
     let closedSet: GridPoint[] = [];
