@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-
 export const INITIAL_WIDTH = 15;
 export const MAX_WIDTH = 40;
 export const MIN_WIDTH = 5;
@@ -24,23 +23,22 @@ export interface Pos {
   y: number;
 }
 
-export interface Node {
+export interface GridNode {
   x: number;
   y: number;
   f: number;
   h: number;
   g: number;
   blocked: boolean;
-  neighbors: Node[];
+  neighbors: GridNode[];
 }
-
 
 export interface WorldMapState {
   width: number;
   height: number;
   nodeSize: number;
   selectionMode: SelectionMode;
-  nodes: Node[][];
+  nodes: GridNode[][];
 }
 
 const initialState: WorldMapState = {
@@ -57,17 +55,21 @@ export const worldMapSlice = createSlice({
   reducers: {
     setWidth: (state, action: PayloadAction<number>) => {
       state.width = action.payload;
-      state.nodes = createGrid(state.width, state.height)
+      state.nodes = createGrid(state.width, state.height);
     },
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
-      state.nodes = createGrid(state.width, state.height)
+      state.nodes = createGrid(state.width, state.height);
     },
     setNodeSize: (state, action: PayloadAction<number>) => {
       state.nodeSize = action.payload;
     },
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
+    },
+    updateNode: (state, action: PayloadAction<Partial<GridNode> & Pos>) => {
+      const { x, y, ...values } = action.payload;
+      state.nodes[y][x] = { ...state.nodes[y][x], ...values };
     },
   },
 });
@@ -80,7 +82,7 @@ export const {
 } = worldMapSlice;
 
 function createGrid(w: number, h: number) {
-  const grid: Node[][] = [];
+  const grid: GridNode[][] = [];
   for (let i = 0; i < h; i++) {
     grid[i] = [];
     for (let j = 0; j < w; j++) {
@@ -91,7 +93,7 @@ function createGrid(w: number, h: number) {
         g: 0,
         h: 0,
         blocked: false,
-        neighbors: []
+        neighbors: [],
       };
     }
   }

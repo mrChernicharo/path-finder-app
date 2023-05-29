@@ -3,12 +3,14 @@ import {
   getNodes,
 } from "../redux/modules/world-map.selector";
 import { SelectionMode, worldMapActions } from "../redux/modules/world-map";
-import { Node } from "./Node";
+import Node from "./Node";
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
   const { setSelectionMode } = worldMapActions;
   const dispatch = useAppDispatch();
+
+  console.log(nodesGrid);
 
   return (
     <div>
@@ -37,7 +39,10 @@ export default function WorldMap() {
         {nodesGrid.map((row, i) => (
           <div key={i} className="flex">
             {row.map((node, j) => (
-              <Node key={"" + i + j} row={node.y} col={node.x} />
+              // <Node key={"" + i + j} node={node} />
+              <div key={"" + i + j}>
+                <Node node={node}/>
+              </div>
             ))}
           </div>
         ))}
