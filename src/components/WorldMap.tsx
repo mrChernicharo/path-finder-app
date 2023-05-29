@@ -11,7 +11,7 @@ export default function WorldMap() {
   const endPos = useAppSelector(getEndPos);
   const grid = useAppSelector(getGrid);
   const dispatch = useAppDispatch();
-  const { setClosedSet, setOpenSet, setCurrentNode } = worldMapActions;
+  const { updateNodes } = worldMapActions;
 
   const [pathGen, setPathGen] = useState<any>(null);
 
@@ -27,16 +27,11 @@ export default function WorldMap() {
       <button
         onClick={() => {
           const { value, done } = pathGen?.next();
+          if (done) return;
 
-          const { closedSet, openSet, current, neighbors: n, path } = value;
+          // const { closedSet, openSet, current, neighbors, path } = value;
 
-          console.log({ value, grid });
-
-          const { neighbors, ...currentNode } = current;
-
-          dispatch(setOpenSet(openSet));
-          dispatch(setClosedSet(closedSet));
-          dispatch(setCurrentNode(currentNode));
+          dispatch(updateNodes(value));
         }}
       >
         Run

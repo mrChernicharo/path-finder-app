@@ -8,16 +8,18 @@ export interface Pos {
 }
 
 export interface Node {
-  pos: Pos;
+  x: number;
+  y: number;
   blocked: boolean;
   f: number;
   g: number;
   h: number;
-  neighbors: Node[];
+  neighbors?: Node[];
   parent?: Node;
   isStart?: boolean;
   isEnd?: boolean;
   visited?: boolean;
+  focused?: boolean;
   isPath?: boolean;
 }
 
@@ -40,7 +42,7 @@ const initialState: WorldMapState = {
   currentNode: undefined,
   openSet: [],
   closedSet: [],
-  grid: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT, START_POS, END_POS),
+  grid: createInitialGrid(INITIAL_WIDTH, INITIAL_HEIGHT, START_POS, END_POS),
 };
 
 export const worldMapSlice = createSlice({
@@ -53,14 +55,40 @@ export const worldMapSlice = createSlice({
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
     },
-    setOpenSet: (state, action: PayloadAction<Node[]>) => {
-      state.openSet = action.payload;
-    },
-    setClosedSet: (state, action: PayloadAction<Node[]>) => {
-      state.closedSet = action.payload;
-    },
-    setCurrentNode: (state, action: PayloadAction<Node>) => {
-      state.currentNode = action.payload;
+    // setOpenSet: (state, action: PayloadAction<Node[]>) => {
+    //   state.openSet = action.payload;
+    // },
+    // setClosedSet: (state, action: PayloadAction<Node[]>) => {
+    //   state.closedSet = action.payload;
+    // },
+    // setCurrentNode: (state, action: PayloadAction<Node>) => {
+    //   state.currentNode = action.payload;
+    // },
+    updateNodes: (
+      state,
+      action: PayloadAction<{
+        openSet: Node[];
+        current: Node;
+        closedSet: Node[];
+        neighbors: Node[];
+        path: Node[];
+      }>
+    ) => {
+      // state.currentNode =
+      console.log(action.payload);
+      const { closedSet, openSet, current, neighbors, path } = action.payload;
+      state.currentNode = current;
+      state.closedSet = closedSet;
+      state.openSet = openSet;
+
+      for (const node of [current, ...neighbors]) {
+        console.log({
+          node,
+          atPos: state.grid[node.y][node.x],
+          grid: state.grid.map((r) => r.map((c) => ({ ...c }))),
+        });
+        state.grid[node.y][node.x] = { ...state.grid[node.y][node.x], ...node };
+      }
     },
   },
 });
@@ -77,7 +105,7 @@ export function heuristic(pos0: Pos, pos1: Pos) {
   return d1 + d2;
 }
 
-export function createGrid(w: number, h: number, startPos: Pos, endPos: Pos) {
+export function createInitialGrid(w: number, h: number, startPos: Pos, endPos: Pos) {
   const grid: Node[][] = [];
   for (let i = 0; i < h; i++) {
     grid[i] = [];
@@ -88,7 +116,8 @@ export function createGrid(w: number, h: number, startPos: Pos, endPos: Pos) {
       const f = h + g;
 
       grid[i][j] = {
-        pos,
+        x: pos.x,
+        y: pos.y,
         f,
         g,
         h,

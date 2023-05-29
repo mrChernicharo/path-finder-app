@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { worldMapReducer, worldMapName } from "./modules/world-map";
 import { createLogger } from "redux-logger";
 
@@ -8,9 +8,9 @@ export const middlewareLogger = (production = false) =>
   });
 
 export const store = configureStore({
-  reducer: {
+  reducer: combineReducers({
     [worldMapName]: worldMapReducer,
-  },
+  }),
   middleware: [middlewareLogger()],
 });
 
