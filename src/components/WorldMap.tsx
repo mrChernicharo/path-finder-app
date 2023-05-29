@@ -4,6 +4,8 @@ import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
 import { Node } from './Node';
 import Draggable from './Draggable';
 import DestinationPoint from './DestinationPoint';
+import { generatePath } from '../utils/helpers';
+import { useEffect, useState } from 'react';
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
@@ -46,7 +48,29 @@ export default function WorldMap() {
 
         <DestinationPoint type="start" initialPos={startNode} />
         <DestinationPoint type="end" initialPos={endNode} />
+
+        <GeneratedPath />
       </div>
+    </div>
+  );
+}
+
+export function GeneratedPath() {
+  const nodesGrid = useAppSelector(getNodes);
+  const startNode = useAppSelector(getStartNode);
+  const endNode = useAppSelector(getEndNode);
+
+  const path = generatePath(nodesGrid, startNode, endNode).map((point) => ({ x: point.x, y: point.y }));
+
+
+  return (
+    <div>
+      {path.map((point) => (
+        <div key={`${point.x} ${point.y}`}>
+          x: {point.x} &nbsp;
+          y: {point.y}
+        </div>
+      ))}
     </div>
   );
 }

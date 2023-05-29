@@ -26,7 +26,7 @@ export function useDrag(props: {
       dispatch(setSelectionMode(SelectionMode.Dragging));
 
       const [prevX, prevY, scale] = (elementRef.current.style.transform.match(/(\d|-|\.)+/g) || [0, 0, 0]).map(Number);
-      console.log({ prevX, prevY, scale });
+      // console.log({ prevX, prevY, scale });
       lastPos.current = { x: prevX, y: prevY };
       offset.current = { x: e.x, y: e.y };
 
@@ -58,6 +58,7 @@ export function useDrag(props: {
 
   function snapToGrid(pos: { x: number; y: number }) {
     const closestNode = document.elementsFromPoint(pos.x, pos.y).find((el) => el.classList.contains('node'));
+    console.log(closestNode?.textContent)
     const gridEl = document.elementsFromPoint(pos.x, pos.y).find((el) => el.classList.contains('grid-outer-wrapper'));
     const gridBox = gridEl?.getBoundingClientRect();
     const closestNodeBox = closestNode?.getBoundingClientRect();
@@ -65,6 +66,8 @@ export function useDrag(props: {
     if (id.current) {
       const x = parseInt(elementRef.current!.style.left);
       const y = parseInt(elementRef.current!.style.top);
+
+
 
       elementRef.current!.style.transform = `translate(
         ${closestNodeBox!.x - gridBox!.left - x}px, 
@@ -74,7 +77,7 @@ export function useDrag(props: {
   }
 
   useEffect(() => {
-    console.log(nodeSize);
+    // console.log(nodeSize);
     snapToGrid({ x: 0, y: 0 });
   }, [nodeSize]);
 

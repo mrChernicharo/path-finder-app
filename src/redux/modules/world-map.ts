@@ -1,17 +1,30 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum SelectionMode {
-  Idle = "Idle",
-  Active = "Active",
-  Dragging = "Dragging"
+  Idle = 'Idle',
+  Active = 'Active',
+  Dragging = 'Dragging',
+}
+
+export interface Pos {
+  x: number;
+  y: number;
 }
 
 export interface Node {
   x: number;
   y: number;
   blocked: boolean;
+  // f: number; // total cost
+  // g: number; // cost from start to current point
+  // h: number; // heuristic -> estimated cost function from current grid point to the goal
+  // neighbors: Node[];
+  // parent: Node | undefined;
 }
+
+export const INITIAL_WIDTH = 20;
+export const INITIAL_HEIGHT = 20;
 
 export interface WorldMapState {
   width: number;
@@ -19,31 +32,31 @@ export interface WorldMapState {
   nodeSize: number;
   selectionMode: SelectionMode;
   nodes: Node[][];
-  start: Node;
-  end: Node;
+  start: Pos;
+  end: Pos;
 }
 
 const initialState: WorldMapState = {
-  width: 10,
-  height: 10,
+  width: INITIAL_WIDTH,
+  height: INITIAL_HEIGHT,
   nodeSize: 24,
   selectionMode: SelectionMode.Idle,
-  nodes: calculateGrid(40, 20),
-  start: { x: 3, y: 2, blocked: false },
-  end: { x: 32, y: 16, blocked: false },
+  nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
+  start: { x: 3, y: 2 },
+  end: { x: 16, y: 16 },
 };
 
 export const worldMapSlice = createSlice({
-  name: "worldMap",
+  name: 'worldMap',
   initialState,
   reducers: {
     setWidth: (state, action: PayloadAction<number>) => {
       state.width = action.payload;
-      state.nodes = calculateGrid(state.width, state.height)
+      state.nodes = createGrid(state.width, state.height);
     },
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
-      state.nodes = calculateGrid(state.width, state.height)
+      state.nodes = createGrid(state.width, state.height);
     },
     setNodeSize: (state, action: PayloadAction<number>) => {
       state.nodeSize = action.payload;
@@ -51,21 +64,18 @@ export const worldMapSlice = createSlice({
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
     },
+    // setNodeBlock: (state, action: PayloadAction<{ x: number, y:number, blocked: boolean }>) => {
     setNodeBlock: (state, action: PayloadAction<Node>) => {
-      const { x, y, blocked } = action.payload
-      state.nodes[y][x].blocked = blocked;
-    }
+      const { x, y, blocked } = action.payload;
+      state.nodes[y][x] = { ...state.nodes[y][x], blocked };
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  reducer: worldMapReducer,
-  name: worldMapName,
-  actions: worldMapActions,
-} = worldMapSlice;
+export const { reducer: worldMapReducer, name: worldMapName, actions: worldMapActions } = worldMapSlice;
 
-function calculateGrid(w: number, h: number) {
+function createGrid(w: number, h: number) {
   const grid: Node[][] = [];
   for (let i = 0; i < h; i++) {
     grid[i] = [];
@@ -73,7 +83,7 @@ function calculateGrid(w: number, h: number) {
       grid[i][j] = {
         x: j,
         y: i,
-        blocked: false
+        blocked: false,
       };
     }
   }
