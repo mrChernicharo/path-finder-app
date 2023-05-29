@@ -35,7 +35,7 @@ class GridPoint {
     this.h = 0; //heuristic estimated cost function from current grid point to the goal
     this.neighbors = []; // neighbors of the current grid point
     this.parent = undefined; // immediate source of the current grid point
-    this.blocked = blocked
+    this.blocked = blocked;
   }
 
   // update neighbors array for a given grid point
@@ -74,6 +74,7 @@ export function* generatePathIterator(nodeGrid: Node[][], startPos: Pos, endPos:
       }
     }
 
+    console.log('GRID', grid);
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
         grid[i][j].updateNeighbors(grid);
@@ -147,8 +148,6 @@ export function* generatePathIterator(nodeGrid: Node[][], startPos: Pos, endPos:
     yield [];
   }
 }
-
-
 
 // export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 //   try {

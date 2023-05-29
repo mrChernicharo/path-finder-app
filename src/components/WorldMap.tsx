@@ -12,11 +12,14 @@ export default function WorldMap() {
   const selectionMode = useAppSelector(getSelectionMode);
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
+  const dispatch = useAppDispatch();
   const { setSelectionMode } = worldMapActions;
 
-  const [generator] = useState<any>(generatePathIterator(nodesGrid, startNode, endNode));
+  const [generator, setGenerator] = useState<any>(generatePathIterator(nodesGrid, startNode, endNode));
 
-  const dispatch = useAppDispatch();
+  useEffect(() => {
+    setGenerator(generatePathIterator(nodesGrid, startNode, endNode));
+  }, [nodesGrid, startNode, endNode]);
 
   return (
     <div>
