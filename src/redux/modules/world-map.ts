@@ -38,16 +38,22 @@ export interface WorldMapState {
   nodes: GridNode[][];
   startPos: Pos;
   endPos: Pos;
+  openSet: GridNode[];
+  closedSet: GridNode[];
 }
 
+const INITIAL_NODES = getProcessedNodes(createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),  START_POS, END_POS);
+const startNode = INITIAL_NODES[START_POS.y][START_POS.x];
 const initialState: WorldMapState = {
   width: INITIAL_WIDTH,
   height: INITIAL_HEIGHT,
   nodeSize: INITIAL_CELL_SIZE,
-  nodes:  getProcessedNodes(createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),  START_POS, END_POS),
+  nodes:  INITIAL_NODES,
   selectionMode: SelectionMode.Idle,
   startPos: START_POS,
   endPos: END_POS,
+  openSet: [startNode],
+  closedSet: []
 };
 
 export const worldMapSlice = createSlice({
@@ -72,6 +78,7 @@ export const worldMapSlice = createSlice({
       const { x, y, ...values } = action.payload;
       state.nodes[y][x] = { ...state.nodes[y][x], ...values };
     },
+    
   },
 });
 

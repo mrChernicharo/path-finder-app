@@ -141,7 +141,7 @@ export function* generateAStarPath(start: GridNode, end: GridNode) {
         }
       }
       console.log("YIELD!");
-      yield { current, neighbors: updatedNeighbors, path, openSet, closedSet };
+      yield { current, neighbors, path, openSet, closedSet };
     }
 
     //no solution by default

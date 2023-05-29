@@ -20,6 +20,7 @@ import {
   heuristic,
   runAStar,
 } from "../util/helpers";
+import { useAStar } from "./useAStar";
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
@@ -29,8 +30,9 @@ export default function WorldMap() {
   const endNode = useAppSelector(getEndNode);
   const { setSelectionMode, updateNode } = worldMapActions;
 
-  const dispatch = useAppDispatch();
+  const { generate } = useAStar();
 
+  const dispatch = useAppDispatch();
 
   return (
     <div>
@@ -42,14 +44,14 @@ export default function WorldMap() {
 
       <button
         onClick={() => {
-          const result = runAStar(startNode, endNode);
-          const { current, neighbors, path, openSet, closedSet } =
-            result.value as any;
-          console.log({ neighbors, current });
-
-          for (const node of [current, ...neighbors]) {
-            dispatch(updateNode(node));
-          }
+          // const result = runAStar(startNode, endNode);
+          // const { current, neighbors, path, openSet, closedSet } =
+          //   result.value as any;
+          // console.log({ neighbors, current });
+          // for (const node of [current, ...neighbors]) {
+          //   dispatch(updateNode(node));
+          // }
+          generate()
         }}
       >
         Run
