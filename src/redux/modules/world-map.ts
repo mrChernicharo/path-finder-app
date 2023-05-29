@@ -23,8 +23,8 @@ export interface Node {
   // parent: Node | undefined;
 }
 
-export const INITIAL_WIDTH = 20;
-export const INITIAL_HEIGHT = 20;
+export const INITIAL_WIDTH = 5;
+export const INITIAL_HEIGHT = 5;
 
 export interface WorldMapState {
   width: number;
@@ -42,8 +42,8 @@ const initialState: WorldMapState = {
   nodeSize: 24,
   selectionMode: SelectionMode.Idle,
   nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
-  start: { x: 3, y: 2 },
-  end: { x: 16, y: 16 },
+  start: { x: 0, y: 0 },
+  end: { x: 4, y: 4 },
 };
 
 export const worldMapSlice = createSlice({
@@ -64,11 +64,17 @@ export const worldMapSlice = createSlice({
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
     },
-    // setNodeBlock: (state, action: PayloadAction<{ x: number, y:number, blocked: boolean }>) => {
     setNodeBlock: (state, action: PayloadAction<Node>) => {
       const { x, y, blocked } = action.payload;
       state.nodes[y][x] = { ...state.nodes[y][x], blocked };
     },
+    updateNode: (state, action: PayloadAction<Partial<Node> & Pos>) => {
+      const { x, y, ...values } = action.payload;
+      state.nodes[y][x] = { ...state.nodes[y][x], ...values };
+    },
+    updateNodes: (state, action: PayloadAction<Array<Partial<Node> & Pos>>) => {}
+    
+    ,
     setStart: (state, action: PayloadAction<Pos>) => {
       state.start = action.payload;
     },

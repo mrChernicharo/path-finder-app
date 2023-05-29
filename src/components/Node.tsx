@@ -5,7 +5,7 @@ import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
 
 export function Node(props: { row: number; col: number; blocked: boolean }) {
   const { row, col, blocked } = props;
-  const { setNodeBlock } = worldMapActions;
+  const { updateNode } = worldMapActions;
   const selectionMode = useAppSelector(getSelectionMode);
   const nodeSize = useAppSelector(getNodeSize);
   const dispatch = useAppDispatch();
@@ -15,13 +15,13 @@ export function Node(props: { row: number; col: number; blocked: boolean }) {
   const onMouseOver = (e: React.MouseEvent) => {
     e.preventDefault();
     if (selectionMode !== SelectionMode.Active) return;
-    e.buttons === 1 && dispatch(setNodeBlock({ x: col, y: row, blocked: true }));
-    e.buttons === 2 && dispatch(setNodeBlock({ x: col, y: row, blocked: false }));
+    e.buttons === 1 && dispatch(updateNode({ x: col, y: row, blocked: true }));
+    e.buttons === 2 && dispatch(updateNode({ x: col, y: row, blocked: false }));
   };
 
   const onMouseDown = (e: React.MouseEvent) => {
-    e.buttons === 1 && dispatch(setNodeBlock({ x: col, y: row, blocked: true }));
-    e.buttons === 2 && dispatch(setNodeBlock({ x: col, y: row, blocked: false }));
+    e.buttons === 1 && dispatch(updateNode({ x: col, y: row, blocked: true }));
+    e.buttons === 2 && dispatch(updateNode({ x: col, y: row, blocked: false }));
   };
 
   return (
