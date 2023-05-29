@@ -1,15 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
+
+export const INITIAL_WIDTH = 15;
+export const MAX_WIDTH = 40;
+export const MIN_WIDTH = 5;
+
+export const INITIAL_HEIGHT = 10;
+export const MAX_HEIGHT = 40;
+export const MIN_HEIGHT = 5;
+
+export const INITIAL_CELL_SIZE = 30;
+export const MAX_CELL_SIZE = 60;
+export const MIN_CELL_SIZE = 20;
+
 export enum SelectionMode {
   Idle = "Idle",
   Active = "Active",
 }
 
-export interface Node {
+export interface Pos {
   x: number;
   y: number;
 }
+
+export interface Node {
+  x: number;
+  y: number;
+  f: number;
+  h: number;
+  g: number;
+  blocked: boolean;
+  neighbors: Node[];
+}
+
 
 export interface WorldMapState {
   width: number;
@@ -20,11 +44,11 @@ export interface WorldMapState {
 }
 
 const initialState: WorldMapState = {
-  width: 10,
-  height: 10,
-  nodeSize: 16,
+  width: INITIAL_WIDTH,
+  height: INITIAL_HEIGHT,
+  nodeSize: INITIAL_CELL_SIZE,
+  nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
   selectionMode: SelectionMode.Idle,
-  nodes: calculateGrid(40, 20),
 };
 
 export const worldMapSlice = createSlice({
@@ -33,11 +57,11 @@ export const worldMapSlice = createSlice({
   reducers: {
     setWidth: (state, action: PayloadAction<number>) => {
       state.width = action.payload;
-      state.nodes = calculateGrid(state.width, state.height)
+      state.nodes = createGrid(state.width, state.height)
     },
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
-      state.nodes = calculateGrid(state.width, state.height)
+      state.nodes = createGrid(state.width, state.height)
     },
     setNodeSize: (state, action: PayloadAction<number>) => {
       state.nodeSize = action.payload;
@@ -55,7 +79,7 @@ export const {
   actions: worldMapActions,
 } = worldMapSlice;
 
-function calculateGrid(w: number, h: number) {
+function createGrid(w: number, h: number) {
   const grid: Node[][] = [];
   for (let i = 0; i < h; i++) {
     grid[i] = [];
@@ -63,6 +87,11 @@ function calculateGrid(w: number, h: number) {
       grid[i][j] = {
         x: j,
         y: i,
+        f: 0,
+        g: 0,
+        h: 0,
+        blocked: false,
+        neighbors: []
       };
     }
   }
