@@ -30,7 +30,6 @@ export default function Draggable(props: DraggableProps) {
       // console.log('dragging');
     },
     dragEndCb(pos) {
-      // console.log('drag ended', { pos });
       onDragEnd(pos);
     },
   });

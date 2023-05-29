@@ -1,8 +1,9 @@
 import { useAppSelector } from '../redux/modules/util';
+import { Pos } from '../redux/modules/world-map';
 import { getNodeSize } from '../redux/modules/world-map.selector';
 import Draggable from './Draggable';
 
-export default function DestinationPoint(props: { type: 'start' | 'end'; initialPos: { x: number; y: number } }) {
+export default function DestinationPoint(props: { type: 'start' | 'end'; initialPos: Pos }) {
   const {
     type,
     initialPos: { x, y },
@@ -15,12 +16,9 @@ export default function DestinationPoint(props: { type: 'start' | 'end'; initial
       height={nodeSize}
       initialPos={{ x: x * nodeSize, y: y * nodeSize }}
       onDragEnd={(pos) => {
-        const elsFromPoint = document.elementsFromPoint(pos.x, pos.y);
         console.log(
           'onDragEnd',
           pos,
-          elsFromPoint,
-          elsFromPoint.find((el) => el.classList.contains('node'))?.classList
         );
       }}
     >

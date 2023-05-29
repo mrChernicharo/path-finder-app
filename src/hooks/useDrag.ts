@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/modules/util';
 import { getNodeSize, getSelectionMode } from '../redux/modules/world-map.selector';
-import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
+import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map';
 
 export function useDrag(props: {
   dragStartCb: (...args: any) => void;
@@ -50,15 +50,16 @@ export function useDrag(props: {
     if (!id.current) return;
     dragging.current = false;
     offset.current = { x: e.x, y: e.y };
+    const pos = snapToGrid({ x: e.x, y: e.y });
+    dragEndCb(pos);
     dispatch(setSelectionMode(SelectionMode.Idle));
-    dragEndCb({ x: e.x, y: e.y });
-    snapToGrid({ x: e.x, y: e.y });
     id.current = null;
   };
 
-  function snapToGrid(pos: { x: number; y: number }) {
-    const closestNode = document.elementsFromPoint(pos.x, pos.y).find((el) => el.classList.contains('node'));
-    console.log(closestNode?.textContent)
+  function snapToGrid(pos: { x: number; y: number }): Pos {
+    const closestNode = document
+      .elementsFromPoint(pos.x, pos.y)
+      .find((el) => el.classList.contains('node')) as HTMLElement;
     const gridEl = document.elementsFromPoint(pos.x, pos.y).find((el) => el.classList.contains('grid-outer-wrapper'));
     const gridBox = gridEl?.getBoundingClientRect();
     const closestNodeBox = closestNode?.getBoundingClientRect();
@@ -67,13 +68,20 @@ export function useDrag(props: {
       const x = parseInt(elementRef.current!.style.left);
       const y = parseInt(elementRef.current!.style.top);
 
-
-
       elementRef.current!.style.transform = `translate(
         ${closestNodeBox!.x - gridBox!.left - x}px, 
         ${closestNodeBox!.y - gridBox!.top - y}px
       ) scale(1)`;
+
+      const posRaw = closestNode?.textContent;
+      const pos = {
+        x: Number(posRaw?.split('-')[1]),
+        y: Number(posRaw?.split('-')[0]),
+      };
+      return pos;
     }
+
+    return { x: -1, y: -1 };
   }
 
   useEffect(() => {
