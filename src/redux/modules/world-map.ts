@@ -22,9 +22,9 @@ export interface Pos {
 export interface GridNode {
   x: number;
   y: number;
-  f: number;
-  h: number;
-  g: number;
+  f: number; // total cost
+  h: number; // heuristic -> estimated cost from current point to the goal
+  g: number; // cost from start to current point
   blocked: boolean;
   neighbors: GridNode[];
 }

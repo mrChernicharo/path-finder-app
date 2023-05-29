@@ -1,4 +1,4 @@
-import { GridNode } from "../redux/modules/world-map";
+import { GridNode, Pos } from "../redux/modules/world-map";
 
 export function createGrid(w: number, h: number) {
   const grid: GridNode[][] = [];
@@ -17,4 +17,13 @@ export function createGrid(w: number, h: number) {
     }
   }
   return grid;
+}
+
+//heuristic we will be using - Manhattan distance
+//for other heuristics visit - https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+export function heuristic(pos0: Pos, pos1: Pos) {
+  let d1 = Math.abs(pos1.x - pos0.x);
+  let d2 = Math.abs(pos1.y - pos0.y);
+
+  return d1 + d2;
 }
