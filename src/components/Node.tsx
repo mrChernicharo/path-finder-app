@@ -18,7 +18,7 @@ export default function Node(props: {
   const {
     isStart,
     isEnd,
-    node: { x, y, blocked, g, f, h },
+    node: { x, y, blocked, g, f, h, neighbors },
   } = props;
 
   const selectionMode = useAppSelector(getSelectionMode);
@@ -38,6 +38,7 @@ export default function Node(props: {
     e.buttons === 1 && dispatch(updateNode({ x, y, blocked: true }));
     e.buttons === 2 && dispatch(updateNode({ x, y, blocked: false }));
   };
+
 
   return (
     <div

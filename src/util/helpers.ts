@@ -27,3 +27,18 @@ export function heuristic(pos0: Pos, pos1: Pos) {
 
   return d1 + d2;
 }
+
+export function determineNeighbors(pos: Pos, grid: GridNode[][]) {
+  const neighbors = [];
+  const top = grid?.[pos.y - 1]?.[pos.x];
+  const right = grid?.[pos.y]?.[pos.x + 1];
+  const bottom = grid?.[pos.y + 1]?.[pos.x];
+  const left = grid?.[pos.y]?.[pos.x - 1];
+
+  if (top && !top.blocked) neighbors.push(top);
+  if (right && !right.blocked) neighbors.push(right);
+  if (bottom && !bottom.blocked) neighbors.push(bottom);
+  if (left && !left.blocked) neighbors.push(left);
+
+  return neighbors;
+}
