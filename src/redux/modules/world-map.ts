@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import {
+  END_POS,
+  INITIAL_HEIGHT,
+  INITIAL_WIDTH,
+  START_POS,
+} from "../../utils/constants";
 
 export interface Pos {
   x: number;
@@ -9,6 +15,11 @@ export interface Pos {
 export interface Node {
   pos: Pos;
   blocked: boolean;
+  f: number;
+  g: number;
+  h: number;
+  neighbors: Node[];
+  parent?: Node;
   isStart?: boolean;
   isEnd?: boolean;
   visited?: boolean;
@@ -20,17 +31,21 @@ export interface WorldMapState {
   height: number;
   startPos: Pos;
   endPos: Pos;
+  currentNode: Node | undefined;
   openSet: Node[];
   closedSet: Node[];
+  grid: Node[][];
 }
 
 const initialState: WorldMapState = {
-  width: 10,
-  height: 10,
-  startPos: { x: 0, y: 0 },
-  endPos: { x: 9, y: 9 },
+  width: INITIAL_WIDTH,
+  height: INITIAL_HEIGHT,
+  startPos: START_POS,
+  endPos: END_POS,
+  currentNode: undefined,
   openSet: [],
   closedSet: [],
+  grid: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT, START_POS, END_POS),
 };
 
 export const worldMapSlice = createSlice({
@@ -52,3 +67,39 @@ export const {
   name: worldMapName,
   actions: worldMapActions,
 } = worldMapSlice;
+
+//heuristic we will be using - Manhattan distance
+//for other heuristics visit - https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+export function heuristic(pos0: Pos, pos1: Pos) {
+  let d1 = Math.abs(pos1.x - pos0.x);
+  let d2 = Math.abs(pos1.y - pos0.y);
+
+  return d1 + d2;
+}
+
+export function createGrid(w: number, h: number, startPos: Pos, endPos: Pos) {
+  const grid: Node[][] = [];
+  for (let i = 0; i < h; i++) {
+    grid[i] = [];
+    for (let j = 0; j < w; j++) {
+      const pos = { x: j, y: i };
+      const h = heuristic(pos, endPos);
+      const g = heuristic(startPos, pos);
+      const f = h + g;
+
+      grid[i][j] = {
+        pos,
+        f,
+        g,
+        h,
+        blocked: false,
+        neighbors: [],
+        parent: undefined,
+        isStart: pos.x === startPos.x && pos.y === startPos.y,
+        isEnd: pos.x === endPos.x && pos.y === endPos.y,
+      };
+    }
+  }
+  console.log(grid)
+  return grid;
+}

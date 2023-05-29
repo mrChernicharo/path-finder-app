@@ -1,4 +1,4 @@
-import { Pos } from "../redux/modules/world-map";
+import { Node, Pos } from "../redux/modules/world-map";
 
 const ID_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
 
@@ -29,7 +29,7 @@ class GridPoint {
   neighbors: GridPoint[];
   parent: GridPoint | undefined;
   blocked: boolean;
-  constructor(x: number, y: number, blocked=false) {
+  constructor(x: number, y: number, blocked = false) {
     this.x = x; //x location of the grid point
     this.y = y; //y location of the grid point
     this.f = 0; //total cost function
@@ -59,7 +59,7 @@ class GridPoint {
   }
 }
 
-export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
+export function* pathGenerator(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
   try {
     const grid: GridPoint[][] = [];
     const [cols, rows] = [nodeGrid[0].length, nodeGrid.length];
@@ -87,7 +87,7 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     let closedSet: GridPoint[] = [];
     const path: GridPoint[] = [];
 
-    // // search!
+    //do search!
     while (openSet.length > 0) {
       //assumption lowest index is the first one to begin with
       let lowestIndex = 0;
@@ -107,7 +107,8 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
         }
         console.log("DONE!");
         // return the traced path
-        return path.reverse();
+        // return path.reverse();
+        yield { current, neighbors: [], openSet, closedSet, path: path.reverse() };
       }
 
       //remove current from openSet
@@ -135,12 +136,13 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
           neighbor.parent = current;
         }
       }
+      yield { current, neighbors, openSet, closedSet, path: [] };
     }
 
     //no solution by default
-    return [];
+    yield { current: null, neighbors: [], openSet, closedSet, path: [] };
   } catch (err) {
     console.warn(err);
-    return [];
+    yield { current: null, neighbors: [], openSet: [], closedSet: [], path: [] };
   }
 }
