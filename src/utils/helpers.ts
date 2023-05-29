@@ -80,8 +80,8 @@ export function* pathGenerator(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
       }
     }
 
-    const start = grid[startPos.x][startPos.y];
-    const end = grid[endPos.x][endPos.y];
+    const start = grid[startPos.y][startPos.x];
+    const end = grid[endPos.y][endPos.x];
 
     let openSet: GridPoint[] = [start];
     let closedSet: GridPoint[] = [];
@@ -112,9 +112,11 @@ export function* pathGenerator(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
       }
 
       //remove current from openSet
-      openSet.splice(lowestIndex, 1);
+      // openSet.splice(lowestIndex, 1);
+      openSet = openSet.filter((_, i) => i !== lowestIndex);
       //add current to closedSet
-      closedSet.push(current);
+      // closedSet.push(current);
+      closedSet = [...closedSet, current];
 
       let neighbors = current.neighbors;
 

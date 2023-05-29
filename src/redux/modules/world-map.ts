@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import {
-  END_POS,
-  INITIAL_HEIGHT,
-  INITIAL_WIDTH,
-  START_POS,
-} from "../../utils/constants";
+import { END_POS, INITIAL_HEIGHT, INITIAL_WIDTH, START_POS } from "../../utils/constants";
 
 export interface Pos {
   x: number;
@@ -58,15 +53,20 @@ export const worldMapSlice = createSlice({
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
     },
+    setOpenSet: (state, action: PayloadAction<Node[]>) => {
+      state.openSet = action.payload;
+    },
+    setClosedSet: (state, action: PayloadAction<Node[]>) => {
+      state.closedSet = action.payload;
+    },
+    setCurrentNode: (state, action: PayloadAction<Node>) => {
+      state.currentNode = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  reducer: worldMapReducer,
-  name: worldMapName,
-  actions: worldMapActions,
-} = worldMapSlice;
+export const { reducer: worldMapReducer, name: worldMapName, actions: worldMapActions } = worldMapSlice;
 
 //heuristic we will be using - Manhattan distance
 //for other heuristics visit - https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
@@ -100,6 +100,6 @@ export function createGrid(w: number, h: number, startPos: Pos, endPos: Pos) {
       };
     }
   }
-  console.log(grid)
+  console.log(grid);
   return grid;
 }

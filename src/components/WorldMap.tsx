@@ -1,13 +1,8 @@
-import { useAppSelector } from "../redux/util";
-import {
-  getMapWidth,
-  getMapHeight,
-  getGrid,
-  getEndPos,
-  getStartPos,
-} from "../redux/modules/world-map.selector";
-import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../redux/util";
+import { getMapWidth, getMapHeight, getGrid, getEndPos, getStartPos } from "../redux/modules/world-map.selector";
+import { useEffect, useState } from "react";
 import { pathGenerator } from "../utils/helpers";
+import { Node, worldMapActions } from "../redux/modules/world-map";
 
 export default function WorldMap() {
   const width = useAppSelector(getMapWidth);
@@ -15,8 +10,15 @@ export default function WorldMap() {
   const startPos = useAppSelector(getStartPos);
   const endPos = useAppSelector(getEndPos);
   const grid = useAppSelector(getGrid);
+  const dispatch = useAppDispatch();
+  const { setClosedSet, setOpenSet, setCurrentNode } = worldMapActions;
 
-  const [pathGen] = useState(pathGenerator(grid, startPos, endPos));
+  const [pathGen, setPathGen] = useState<any>(null);
+
+  useEffect(() => {
+    if (!grid[0][0].f) return;
+    setPathGen(pathGenerator(grid, startPos, endPos));
+  }, [grid]);
 
   return (
     <div>
@@ -24,8 +26,17 @@ export default function WorldMap() {
 
       <button
         onClick={() => {
-          const { value, done } = pathGen.next();
-          console.log(value);
+          const { value, done } = pathGen?.next();
+
+          const { closedSet, openSet, current, neighbors: n, path } = value;
+
+          console.log({ value, grid });
+
+          const { neighbors, ...currentNode } = current;
+
+          dispatch(setOpenSet(openSet));
+          dispatch(setClosedSet(closedSet));
+          dispatch(setCurrentNode(currentNode));
         }}
       >
         Run
