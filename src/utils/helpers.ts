@@ -40,8 +40,8 @@ class GridPoint {
 
   // update neighbors array for a given grid point
   updateNeighbors(grid: GridPoint[][]) {
-    let i = this.x;
-    let j = this.y;
+    let i = this.y;
+    let j = this.x;
     if (i < grid.length - 1) {
       this.neighbors.push(grid[i + 1][j]);
     }
@@ -64,25 +64,25 @@ export function* generatePathIterator(nodeGrid: Node[][], startPos: Pos, endPos:
     const grid: GridPoint[][] = [];
     const [cols, rows] = [nodeGrid[0].length, nodeGrid.length];
 
-    for (let i = 0; i < cols; i++) {
-      grid[i] = new Array(rows);
+    for (let i = 0; i < rows; i++) {
+      grid[i] = new Array(cols);
     }
 
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
         grid[i][j] = new GridPoint(i, j, nodeGrid[i][j].blocked);
       }
     }
 
     console.log('GRID', grid);
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
         grid[i][j].updateNeighbors(grid);
       }
     }
 
-    const start = grid[startPos.x][startPos.y];
-    const end = grid[endPos.x][endPos.y];
+    const start = grid[startPos.y][startPos.x];
+    const end = grid[endPos.y][endPos.x];
 
     let openSet: GridPoint[] = [start];
     let closedSet: GridPoint[] = [];

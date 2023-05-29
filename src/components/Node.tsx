@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/util';
 import { getSelectionMode, getNodes, getNodeSize } from '../redux/modules/world-map/world-map.selector';
-import { SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
+import { Node, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 
-export function Node(props: { row: number; col: number; blocked: boolean }) {
-  const { row, col, blocked } = props;
+export function NodeComponent(props: { node: Node }) {
+  const { y: row, x: col, blocked } = props.node;
   const { updateNode } = worldMapActions;
   const selectionMode = useAppSelector(getSelectionMode);
   const nodeSize = useAppSelector(getNodeSize);

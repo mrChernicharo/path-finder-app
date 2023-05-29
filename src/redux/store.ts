@@ -1,10 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
 import { worldMapReducer, worldMapName } from './modules/world-map/world-map'
+
+const customizedMiddleware = getDefaultMiddleware({
+  serializableCheck: false
+})
 
 export const store = configureStore({
   reducer: {
     [worldMapName]: worldMapReducer
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware()
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

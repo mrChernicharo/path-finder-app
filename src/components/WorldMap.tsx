@@ -1,7 +1,13 @@
 import { useAppDispatch, useAppSelector } from '../redux/util';
-import { getNodeSize, getNodes, getSelectionMode, getStartNode, getEndNode } from '../redux/modules/world-map/world-map.selector';
+import {
+  getNodeSize,
+  getNodes,
+  getSelectionMode,
+  getStartNode,
+  getEndNode,
+} from '../redux/modules/world-map/world-map.selector';
 import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
-import { Node } from './Node';
+import { NodeComponent } from './Node';
 import Draggable from './Draggable';
 import DestinationPoint from './DestinationPoint';
 import { generatePathIterator } from '../utils/helpers';
@@ -13,7 +19,7 @@ export default function WorldMap() {
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
   const dispatch = useAppDispatch();
-  const { setSelectionMode } = worldMapActions;
+  const { setSelectionMode, updateNode, updateNodes } = worldMapActions;
 
   const [generator, setGenerator] = useState<any>(generatePathIterator(nodesGrid, startNode, endNode));
 
@@ -45,9 +51,8 @@ export default function WorldMap() {
       >
         {nodesGrid.map((row, i) => (
           <div key={i} className="flex">
-            {row.map((node, j) => { 
-
-              return <Node key={'' + i + j} row={node.y} col={node.x} blocked={node.blocked} />;
+            {row.map((node, j) => {
+              return <NodeComponent key={'' + i + j} node={node} />;
             })}
           </div>
         ))}
@@ -67,7 +72,17 @@ export default function WorldMap() {
               const { current, neighbors, openSet, closedSet, path, msg } = value;
               console.log({ current, neighbors, openSet, closedSet, path, msg });
 
-              // const updatingNodes = [current, ...neighbors]
+              dispatch(
+                updateNodes(
+                  [current].map((n) => {
+                    const { x, y, blocked, f, g, h, rest } = n;
+                    return { x, y, f, g, h, blocked };
+                  })
+                )
+              );
+
+              // [current, ...neighbors].forEach(node => {
+              // })
             }, 200);
           }}
         >
