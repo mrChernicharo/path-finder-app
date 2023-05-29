@@ -1,5 +1,5 @@
 import { MAX_WIDTH, MAX_HEIGHT } from "../App";
-import { useAppSelector, useAppDispatch } from "../redux/modules/util";
+import { useAppSelector, useAppDispatch } from "../redux/util";
 import { worldMapActions } from "../redux/modules/world-map";
 import { getMapWidth, getMapHeight } from "../redux/modules/world-map.selector";
 
