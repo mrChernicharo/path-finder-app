@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../redux/modules/util';
-import { getSelectionMode, getNodes, getNodeSize } from '../redux/modules/world-map.selector';
-import { SelectionMode, worldMapActions } from '../redux/modules/world-map';
+import { useAppDispatch, useAppSelector } from '../redux/util';
+import { getSelectionMode, getNodes, getNodeSize } from '../redux/modules/world-map/world-map.selector';
+import { SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 
 export function Node(props: { row: number; col: number; blocked: boolean }) {
   const { row, col, blocked } = props;

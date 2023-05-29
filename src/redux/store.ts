@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { worldMapReducer, worldMapName } from './modules/world-map'
+import { worldMapReducer, worldMapName } from './modules/world-map/world-map'
 
 export const store = configureStore({
   reducer: {

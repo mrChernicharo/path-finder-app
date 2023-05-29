@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../redux/modules/util';
-import { getNodeSize, getSelectionMode } from '../redux/modules/world-map.selector';
-import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map';
+import { useAppDispatch, useAppSelector } from '../redux/util';
+import { getNodeSize, getSelectionMode } from '../redux/modules/world-map/world-map.selector';
+import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 
 export function useDrag(props: {
   dragStartCb: (...args: any) => void;

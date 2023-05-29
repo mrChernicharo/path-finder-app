@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { RootState } from '../store';
+import { RootState } from '../../store';
+import { Node } from './world-map';
 
 const selectSelf = (state: RootState) => state;
 export const getMapWidth = createSelector(selectSelf, ({ worldMap }) => worldMap.width);

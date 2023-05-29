@@ -1,7 +1,7 @@
 import { ReactNode, useCallback, useEffect, useRef, useState, RefObject } from 'react';
 import { useDrag } from '../hooks/useDrag';
-import { useAppSelector } from '../redux/modules/util';
-import { getNodes } from '../redux/modules/world-map.selector';
+import { useAppSelector } from '../redux/util';
+import { getNodes } from '../redux/modules/world-map/world-map.selector';
 import { idMaker } from '../utils/helpers';
 import { Pos } from '../redux/modules/world-map';
 

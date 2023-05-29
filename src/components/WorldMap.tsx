@@ -1,6 +1,6 @@
-import { useAppDispatch, useAppSelector } from '../redux/modules/util';
-import { getNodeSize, getNodes, getSelectionMode, getStartNode, getEndNode } from '../redux/modules/world-map.selector';
-import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map';
+import { useAppDispatch, useAppSelector } from '../redux/util';
+import { getNodeSize, getNodes, getSelectionMode, getStartNode, getEndNode } from '../redux/modules/world-map/world-map.selector';
+import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 import { Node } from './Node';
 import Draggable from './Draggable';
 import DestinationPoint from './DestinationPoint';
@@ -45,9 +45,10 @@ export default function WorldMap() {
       >
         {nodesGrid.map((row, i) => (
           <div key={i} className="flex">
-            {row.map((node, j) => (
-              <Node key={'' + i + j} row={node.y} col={node.x} blocked={node.blocked} />
-            ))}
+            {row.map((node, j) => { 
+
+              return <Node key={'' + i + j} row={node.y} col={node.x} blocked={node.blocked} />;
+            })}
           </div>
         ))}
 
@@ -62,8 +63,12 @@ export default function WorldMap() {
               const { value, done } = generator.next();
 
               if (done) return;
-              console.log(value);
-            }, 100);
+
+              const { current, neighbors, openSet, closedSet, path, msg } = value;
+              console.log({ current, neighbors, openSet, closedSet, path, msg });
+
+              // const updatingNodes = [current, ...neighbors]
+            }, 200);
           }}
         >
           Run

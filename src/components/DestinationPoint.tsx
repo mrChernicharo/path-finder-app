@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../redux/modules/util';
-import { Pos, worldMapActions } from '../redux/modules/world-map';
-import { getNodeSize } from '../redux/modules/world-map.selector';
+import { useAppDispatch, useAppSelector } from '../redux/util';
+import { Pos, worldMapActions } from '../redux/modules/world-map/world-map';
+import { getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import Draggable from './Draggable';
 
 export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Pos }) {

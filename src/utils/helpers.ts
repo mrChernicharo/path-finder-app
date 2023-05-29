@@ -1,4 +1,4 @@
-import { Node, Pos } from '../redux/modules/world-map';
+import { Node, Pos } from '../redux/modules/world-map/world-map';
 
 const ID_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-';
 
@@ -106,9 +106,8 @@ export function* generatePathIterator(nodeGrid: Node[][], startPos: Pos, endPos:
           path.push(temp.parent);
           temp = temp.parent;
         }
-        console.log('DONE!');
         // return the traced path
-        yield path.reverse();
+        yield { current, neighbors: [], openSet, closedSet, path: path.reverse(), msg: "DONE" };
       }
 
       //remove current from openSet
@@ -137,15 +136,13 @@ export function* generatePathIterator(nodeGrid: Node[][], startPos: Pos, endPos:
         }
       }
 
-      console.log('YIELD!');
-      yield { current, path, neighbors, openSet, closedSet };
+      yield { current, neighbors, openSet, closedSet, path, msg: "RUNNING" };
     }
 
     //no solution by default
-    yield [];
+    yield { current: null, neighbors: [], openSet, closedSet, path, msg: "NO SOLUTION"  };
   } catch (err) {
-    console.warn(err);
-    yield [];
+    yield { current: null, neighbors: [], openSet: [], closedSet: [], path: [], msg: "ERROR"  };
   }
 }
 
