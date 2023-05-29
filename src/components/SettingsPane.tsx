@@ -1,6 +1,7 @@
 import { useAppSelector, useAppDispatch } from "../redux/modules/util";
-import { MAX_CELL_SIZE, MAX_HEIGHT, MAX_WIDTH, MIN_CELL_SIZE, MIN_HEIGHT, MIN_WIDTH, worldMapActions } from "../redux/modules/world-map";
+import { worldMapActions } from "../redux/modules/world-map";
 import { getMapWidth, getMapHeight, getNodeSize } from "../redux/modules/world-map.selector";
+import { MIN_WIDTH, MAX_WIDTH, MIN_HEIGHT, MAX_HEIGHT, MIN_CELL_SIZE, MAX_CELL_SIZE } from "../util/constants";
 
 
 export default function SettingsPane() {

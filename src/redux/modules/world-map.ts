@@ -1,17 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-export const INITIAL_WIDTH = 15;
-export const MAX_WIDTH = 40;
-export const MIN_WIDTH = 5;
-
-export const INITIAL_HEIGHT = 10;
-export const MAX_HEIGHT = 40;
-export const MIN_HEIGHT = 5;
-
-export const INITIAL_CELL_SIZE = 30;
-export const MAX_CELL_SIZE = 60;
-export const MIN_CELL_SIZE = 20;
+import {
+  INITIAL_WIDTH,
+  INITIAL_HEIGHT,
+  INITIAL_CELL_SIZE,
+  START_POS,
+  END_POS,
+} from "../../util/constants";
+import { createGrid } from "../../util/helpers";
 
 export enum SelectionMode {
   Idle = "Idle",
@@ -39,6 +35,8 @@ export interface WorldMapState {
   nodeSize: number;
   selectionMode: SelectionMode;
   nodes: GridNode[][];
+  startPos: Pos;
+  endPos: Pos;
 }
 
 const initialState: WorldMapState = {
@@ -47,6 +45,8 @@ const initialState: WorldMapState = {
   nodeSize: INITIAL_CELL_SIZE,
   nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
   selectionMode: SelectionMode.Idle,
+  startPos: START_POS,
+  endPos: END_POS,
 };
 
 export const worldMapSlice = createSlice({
@@ -74,28 +74,8 @@ export const worldMapSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const {
   reducer: worldMapReducer,
   name: worldMapName,
   actions: worldMapActions,
 } = worldMapSlice;
-
-function createGrid(w: number, h: number) {
-  const grid: GridNode[][] = [];
-  for (let i = 0; i < h; i++) {
-    grid[i] = [];
-    for (let j = 0; j < w; j++) {
-      grid[i][j] = {
-        x: j,
-        y: i,
-        f: 0,
-        g: 0,
-        h: 0,
-        blocked: false,
-        neighbors: [],
-      };
-    }
-  }
-  return grid;
-}

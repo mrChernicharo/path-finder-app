@@ -32,3 +32,13 @@ export const getNode = createSelector(
   (nodes: Node[][], coords: { row: number; col: number }) => coords,
   (nodes, { row, col }) => nodes[row][col]
 );
+
+
+export const getStartPos = createSelector(
+  selectSelf,
+  ({ worldMap }) => worldMap.startPos
+);
+export const getEndPos = createSelector(
+  selectSelf,
+  ({ worldMap }) => worldMap.endPos
+);
