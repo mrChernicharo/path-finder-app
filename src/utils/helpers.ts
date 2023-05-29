@@ -17,19 +17,6 @@ function heuristic(pos0: Pos, pos1: Pos) {
   return d1 + d2;
 }
 
-function gridPoint(pos: Pos) {
-  return {
-    x: pos.x,
-    y: pos.y,
-    f: 0,
-    g: 0,
-    h: 0,
-    neighbors: [],
-    parent: undefined,
-    updateNeighbors(grid: any) {},
-  };
-}
-
 //constructor function to create all the grid points as objects containind the data for the points
 class GridPoint {
   x: number;
@@ -93,8 +80,6 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     const start = grid[startPos.x][startPos.y];
     const end = grid[endPos.x][endPos.y];
 
-    
-
     let openSet: GridPoint[] = [start];
     let closedSet: GridPoint[] = [];
     const path: GridPoint[] = [];
@@ -154,5 +139,98 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
   } catch (err) {
     console.warn(err);
     return [];
+  }
+}
+
+export function* generatePathIterator(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
+  console.log('pathIterator');
+  try {
+    // initialize grid
+    const grid: GridPoint[][] = [];
+    const [cols, rows] = [nodeGrid[0].length, nodeGrid.length];
+
+    for (let i = 0; i < cols; i++) {
+      grid[i] = new Array(rows);
+    }
+
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        grid[i][j] = new GridPoint(i, j);
+      }
+    }
+
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        grid[i][j].updateNeighbors(grid);
+      }
+    }
+
+    const start = grid[startPos.x][startPos.y];
+    const end = grid[endPos.x][endPos.y];
+
+    let openSet: GridPoint[] = [start];
+    let closedSet: GridPoint[] = [];
+    const path: GridPoint[] = [];
+
+    // // search!
+    while (openSet.length > 0) {
+      console.log(openSet, closedSet);
+      // yield { openSet, closedSet };
+      //assumption lowest index is the first one to begin with
+      let lowestIndex = 0;
+      for (let i = 0; i < openSet.length; i++) {
+        if (openSet[i].f < openSet[lowestIndex].f) {
+          lowestIndex = i;
+        }
+      }
+      let current = openSet[lowestIndex];
+
+      if (current.x === end.x && current.y === end.y) {
+        let temp = current;
+        path.push(temp);
+        while (temp.parent) {
+          path.push(temp.parent);
+          temp = temp.parent;
+        }
+        console.log('DONE!');
+        // return the traced path
+        yield path.reverse();
+      }
+
+      //remove current from openSet
+      openSet.splice(lowestIndex, 1);
+      //add current to closedSet
+      closedSet.push(current);
+
+      let neighbors = current.neighbors;
+
+      for (let i = 0; i < neighbors.length; i++) {
+        let neighbor = neighbors[i];
+
+        if (!closedSet.includes(neighbor)) {
+          let possibleG = current.g + 1;
+
+          if (!openSet.includes(neighbor)) {
+            openSet.push(neighbor);
+          } else if (possibleG >= neighbor.g) {
+            continue;
+          }
+
+          neighbor.g = possibleG;
+          neighbor.h = heuristic(neighbor, end);
+          neighbor.f = neighbor.g + neighbor.h;
+          neighbor.parent = current;
+        }
+      }
+
+      console.log('YIELD!');
+      yield { current, path, neighbors, openSet, closedSet };
+    }
+
+    //no solution by default
+    yield [];
+  } catch (err) {
+    console.warn(err);
+    yield [];
   }
 }

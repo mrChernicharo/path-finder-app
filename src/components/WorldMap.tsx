@@ -4,7 +4,7 @@ import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map'
 import { Node } from './Node';
 import Draggable from './Draggable';
 import DestinationPoint from './DestinationPoint';
-import { generatePath } from '../utils/helpers';
+import { generatePath, generatePathIterator } from '../utils/helpers';
 import { useEffect, useState } from 'react';
 
 export default function WorldMap() {
@@ -13,6 +13,8 @@ export default function WorldMap() {
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
   const { setSelectionMode } = worldMapActions;
+
+  const [generator,] = useState<any>(generatePathIterator(nodesGrid, startNode, endNode));
 
   const dispatch = useAppDispatch();
 
@@ -49,7 +51,16 @@ export default function WorldMap() {
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
 
-        <GeneratedPath />
+        {/* <GeneratedPath /> */}
+
+        <button
+          onClick={() => {
+            const result = generator.next().value;
+            console.log(result);
+          }}
+        >
+          Run
+        </button>
       </div>
     </div>
   );
