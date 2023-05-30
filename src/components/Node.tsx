@@ -31,10 +31,6 @@ export function NodeComponent(props: { node: Node }) {
       style={{ width: nodeSize, height: nodeSize }}
       onMouseOver={onMouseOver}
       onMouseDown={onMouseDown}
-    >
-      <span className="select-none">
-        {row}-{col}
-      </span>
-    </div>
+    ></div>
   );
 }

@@ -5,13 +5,11 @@ import { getEndNode, getNodeSize, getStartNode } from '../redux/modules/world-ma
 import Draggable from './Draggable';
 
 export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Pos }) {
-  const [pos, setPos] = useState(props.pos);
-
-  const nodeSize = useAppSelector(getNodeSize);
-  const startNode = useAppSelector(getStartNode);
-  const endNode = useAppSelector(getEndNode);
-  const dispatch = useAppDispatch();
   const { setStart, setEnd } = worldMapActions;
+  const nodeSize = useAppSelector(getNodeSize);
+  const dispatch = useAppDispatch();
+
+  const [pos, setPos] = useState(props.pos);
 
   return (
     <Draggable

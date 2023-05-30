@@ -22,7 +22,7 @@ export default function WorldMap() {
       </ul>
 
       <div
-        className="grid-outer-wrapper relative"
+        className="grid-outer-wrapper relative "
         onMouseDown={(e) => {
           (e.buttons === 1 || e.buttons === 2) &&
             selectionMode === SelectionMode.Idle &&
@@ -35,13 +35,15 @@ export default function WorldMap() {
           e.preventDefault();
         }}
       >
-        {nodesGrid.map((row, i) => (
-          <div key={i} className="flex">
-            {row.map((node, j) => {
-              return <NodeComponent key={'' + i + j} node={node} />;
-            })}
-          </div>
-        ))}
+        <div className="border-slate-400 border-t-[1px] border-l-[1px]">
+          {nodesGrid.map((row, i) => (
+            <div key={i} className="flex">
+              {row.map((node, j) => {
+                return <NodeComponent key={'' + i + j} node={node} />;
+              })}
+            </div>
+          ))}
+        </div>
 
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
