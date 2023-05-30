@@ -46,7 +46,7 @@ export default function SettingsPane() {
         <span>{height}</span>
       </div>
 
-      <div>
+      {/* <div>
         <label htmlFor="map-node-size">node size</label>
         <input
           type="range"
@@ -59,7 +59,7 @@ export default function SettingsPane() {
           }}
         />
         <span>{nodeSize}</span>
-      </div>
+      </div> */}
 
 
       {/* <button onClick={() => generatePath()}>Generate Path!</button> */}

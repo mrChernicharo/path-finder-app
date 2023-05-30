@@ -32,15 +32,18 @@ export default function Path() {
 
   return (
     <div>
-      {path.map(({ x, y }) => (
+      <button onClick={handlePath}>{active ? 'clear' : 'run'}</button>
+
+      {path.map(({ x, y }, i) => (
         <div
           key={`${x} ${y}`}
-          className="absolute bg-green-400 z-0 opacity-30 pointer-events-none"
+          className="absolute bg-green-400 z-0 opacity-60 pointer-events-none flex justify-center items-center"
           style={{ top: y * nodeSize, left: x * nodeSize, width: nodeSize, height: nodeSize }}
-        ></div>
+        >
+          <span className="text-[10px] text-white">{i}</span>
+        </div>
       ))}
 
-      <button onClick={handlePath}>{active ? 'clear' : 'run'}</button>
     </div>
   );
 }

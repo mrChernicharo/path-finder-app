@@ -7,6 +7,6 @@ export const MAX_NODE_SIZE = 50;
 
 
 
-export const INITIAL_WIDTH = 20;
+export const INITIAL_WIDTH = 30;
 export const INITIAL_HEIGHT = 15;
 export const INITIAL_NODE_SIZE = 30;

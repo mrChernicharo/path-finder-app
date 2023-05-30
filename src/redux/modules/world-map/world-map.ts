@@ -98,7 +98,8 @@ function createGrid(w: number, h: number) {
       grid[i][j] = {
         x: j,
         y: i,
-        blocked: Math.random() > 0.9,
+        // blocked: false,
+        blocked: Math.random() > 0.8,
       };
     }
   }
