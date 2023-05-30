@@ -27,9 +27,9 @@ class GridPoint {
   neighbors: GridPoint[];
   parent: GridPoint | undefined;
   blocked: boolean;
-  constructor(x: number, y: number, blocked = false) {
-    this.x = x; //x location of the grid point
-    this.y = y; //y location of the grid point
+  constructor(row: number, col: number, blocked = false) {
+    this.x = col; //x location of the grid point
+    this.y = row; //y location of the grid point
     this.f = 0; //total cost function
     this.g = 0; //cost function from start to the current grid point
     this.h = 0; //heuristic estimated cost function from current grid point to the goal
@@ -40,24 +40,27 @@ class GridPoint {
 
   // update neighbors array for a given grid point
   updateNeighbors(grid: GridPoint[][]) {
-    let i = this.y;
-    let j = this.x;
-    if (i < grid.length - 1) {
-      this.neighbors.push(grid[i + 1][j]);
+    let row = this.y;
+    let col = this.x;
+    // top
+    if (row > 0) {
+      this.neighbors.push(grid[row - 1][col]);
     }
-    if (i > 0) {
-      this.neighbors.push(grid[i - 1][j]);
+    // bottom
+    if (row < grid.length - 1) {
+      this.neighbors.push(grid[row + 1][col]);
     }
-    if (j < grid[0].length - 1) {
-      this.neighbors.push(grid[i][j + 1]);
+    // left
+    if (col > 0) {
+      this.neighbors.push(grid[row][col - 1]);
     }
-    if (j > 0) {
-      this.neighbors.push(grid[i][j - 1]);
+    // right
+    if (col < grid[0].length - 1) {
+      this.neighbors.push(grid[row][col + 1]);
     }
-
   }
   print(tag = 'curr') {
-    console.log({id: `${this.x} ${this.y}`, blocked: this.blocked, tag})
+    console.log({ id: `${this.y} ${this.x}`, tag, blocked: this.blocked, f: this.f, g: this.g, h: this.h });
   }
 }
 
@@ -65,30 +68,32 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
   try {
     // initialize grid
     const grid: GridPoint[][] = [];
-    const [rows, cols] = [ nodeGrid.length, nodeGrid[0].length];
+    const [rows, cols] = [nodeGrid.length, nodeGrid[0].length];
 
-    for (let i = 0; i < cols; i++) {
-      grid[i] = new Array(rows);
+    for (let row = 0; row < rows; row++) {
+      grid[row] = new Array(cols);
     }
 
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < rows; j++) {
-        grid[i][j] = new GridPoint(i, j, nodeGrid[i][j].blocked);
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        grid[row][col] = new GridPoint(row, col, nodeGrid[row][col].blocked);
       }
     }
 
-    for (let i = 0; i < cols; i++) {
-      for (let j = 0; j < rows; j++) {
-        grid[i][j].updateNeighbors(grid);
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        grid[row][col].updateNeighbors(grid);
       }
     }
 
-    const start = grid[startPos.x][startPos.y];
-    const end = grid[endPos.x][endPos.y];
+    const start = grid[startPos.y][startPos.x];
+    const end = grid[endPos.y][endPos.x];
 
-    let openSet: GridPoint[] = [start];
+    let openSet: GridPoint[] = [];
     let closedSet: GridPoint[] = [];
     const path: GridPoint[] = [];
+    openSet.push(start);
+    console.log({ grid });
 
     // // search!
     while (openSet.length > 0) {
@@ -100,6 +105,7 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
         }
       }
       let current = openSet[lowestIndex];
+      console.log({ openSet: [...openSet], closedSet: [...closedSet] });
       current.print();
 
       if (current.x === end.x && current.y === end.y) {
@@ -123,10 +129,10 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 
       for (let i = 0; i < neighbors.length; i++) {
         let neighbor = neighbors[i];
-        // neighbor.print(getNodeTag(current, neighbor.x, neighbor.y));
-        
+
         if (!neighbor.blocked && !closedSet.includes(neighbor)) {
           let possibleG = current.g + 1;
+          neighbor.print(getNodeTag(current, neighbor.x, neighbor.y));
 
           if (!openSet.includes(neighbor)) {
             openSet.push(neighbor);
@@ -149,7 +155,6 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     return [];
   }
 }
-
 
 const getNodeTag = (curr: GridPoint, i: number, j: number) => {
   const { x, y } = curr;

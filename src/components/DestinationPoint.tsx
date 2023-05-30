@@ -14,7 +14,7 @@ export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Po
   const { setStart, setEnd } = worldMapActions;
 
   useEffect(() => {
-    console.log(startNode, endNode);
+    console.log({ startNode, endNode });
   }, [startNode, endNode]);
 
   return (
@@ -22,19 +22,15 @@ export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Po
       width={nodeSize}
       height={nodeSize}
       initialPos={{ x: pos.x * nodeSize, y: pos.y * nodeSize }}
-      onDragEnd={(pos) => {
-        setPos(pos);
+      onDragEnd={(position) => {
+        setPos(position);
 
         if (props.type === 'start') {
-          dispatch(setStart(pos));
+          dispatch(setStart(position));
         }
         if (props.type === 'end') {
-          dispatch(setEnd(pos));
+          dispatch(setEnd(position));
         }
-
-        setTimeout(() => {
-          console.log('dragEnd', props.type, pos);
-        }, 100);
       }}
     >
       <div
