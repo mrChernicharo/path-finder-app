@@ -46,10 +46,9 @@ export default function WorldMap() {
           </div>
         ))}
 
+        <GeneratedPath />
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
-
-        <GeneratedPath />
       </div>
     </div>
   );
@@ -63,19 +62,31 @@ export function GeneratedPath() {
 
   const [path, setPath] = useState<Pos[]>([]);
 
+  function handlePath() {
+    if (path.length) {
+      setPath([]);
+    } else {
+      setPath(generatePath(nodesGrid, startNode, endNode).map((point) => ({ x: point.x, y: point.y })));
+    }
+  }
+
   useEffect(() => {
-    setPath(generatePath(nodesGrid, startNode, endNode).map((point) => ({ x: point.x, y: point.y })));
-  }, [nodesGrid, startNode, endNode]);
+    if (path.length) {
+      setPath(generatePath(nodesGrid, startNode, endNode).map((point) => ({ x: point.x, y: point.y })));
+    }
+  }, [nodesGrid, startNode, endNode, path])
 
   return (
     <div>
       {path.map(({ x, y }) => (
         <div
           key={`${x} ${y}`}
-          className="absolute bg-green-400 z-0 opacity-30"
+          className="absolute bg-green-400 z-0 opacity-30 pointer-events-none"
           style={{ top: y * nodeSize, left: x * nodeSize, width: nodeSize, height: nodeSize }}
         ></div>
       ))}
+
+      <button onClick={handlePath}>{path.length ? 'clear' : 'run'}</button>
     </div>
   );
 }

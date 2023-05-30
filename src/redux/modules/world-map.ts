@@ -63,7 +63,6 @@ export const worldMapSlice = createSlice({
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
     },
-    // setNodeBlock: (state, action: PayloadAction<{ x: number, y:number, blocked: boolean }>) => {
     setNodeBlock: (state, action: PayloadAction<Node>) => {
       const { x, y, blocked } = action.payload;
       state.nodes[y][x] = { ...state.nodes[y][x], blocked };

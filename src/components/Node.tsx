@@ -25,18 +25,20 @@ export function Node(props: { row: number; col: number; blocked: boolean }) {
   };
 
   return (
-    <div
-      className={`node row-${row} col-${col} ${
-        blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700'
-      } flex gap-2 justify-center items-center text-[6px] border-slate-400 border-b-[1px] border-r-[1px] border-solid`}
-      data-testid={`row-${row}-col-${col}`}
-      style={{ width: nodeSize, height: nodeSize }}
-      onMouseOver={onMouseOver}
-      onMouseDown={onMouseDown}
-    >
-      <span className="select-none">
-        {row}-{col}
-      </span>
+    <div onClick={console.log}>
+      <div
+        className={`node row-${row} col-${col} ${
+          blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700'
+        } flex gap-2 justify-center items-center text-[6px] border-slate-400 border-b-[1px] border-r-[1px] border-solid`}
+        data-testid={`row-${row}-col-${col}`}
+        style={{ width: nodeSize, height: nodeSize }}
+        onMouseOver={onMouseOver}
+        onMouseDown={onMouseDown}
+      >
+        <span className="select-none">
+          {row}-{col}
+        </span>
+      </div>
     </div>
   );
 }

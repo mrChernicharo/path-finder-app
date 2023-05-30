@@ -59,9 +59,7 @@ class GridPoint {
       this.neighbors.push(grid[row][col + 1]);
     }
   }
-  print(tag = 'curr') {
-    console.log({ id: `${this.y} ${this.x}`, tag, blocked: this.blocked, f: this.f, g: this.g, h: this.h });
-  }
+
 }
 
 export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
@@ -93,7 +91,6 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     let closedSet: GridPoint[] = [];
     const path: GridPoint[] = [];
     openSet.push(start);
-    console.log({ grid });
 
     // // search!
     while (openSet.length > 0) {
@@ -105,8 +102,6 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
         }
       }
       let current = openSet[lowestIndex];
-      console.log({ openSet: [...openSet], closedSet: [...closedSet] });
-      current.print();
 
       if (current.x === end.x && current.y === end.y) {
         let temp = current;
@@ -132,7 +127,6 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 
         if (!neighbor.blocked && !closedSet.includes(neighbor)) {
           let possibleG = current.g + 1;
-          neighbor.print(getNodeTag(current, neighbor.x, neighbor.y));
 
           if (!openSet.includes(neighbor)) {
             openSet.push(neighbor);
