@@ -69,10 +69,12 @@ export const worldMapSlice = createSlice({
       state.nodes[y][x] = { ...state.nodes[y][x], blocked };
     },
     setStart: (state, action: PayloadAction<Pos>) => {
-      state.start = action.payload;
+      state.start.x = action.payload.x;
+      state.start.y = action.payload.y;
     },
     setEnd: (state, action: PayloadAction<Pos>) => {
-      state.end = action.payload;
+      state.end.x = action.payload.x;
+      state.end.y = action.payload.y;
     }
   },
 });
@@ -88,7 +90,7 @@ function createGrid(w: number, h: number) {
       grid[i][j] = {
         x: j,
         y: i,
-        blocked: false,
+        blocked: Math.random() > 0.9,
       };
     }
   }

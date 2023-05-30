@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/modules/util';
 import { Pos, worldMapActions } from '../redux/modules/world-map';
-import { getNodeSize } from '../redux/modules/world-map.selector';
+import { getEndNode, getNodeSize, getStartNode } from '../redux/modules/world-map.selector';
 import Draggable from './Draggable';
 
 export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Pos }) {
   const [pos, setPos] = useState(props.pos);
 
   const nodeSize = useAppSelector(getNodeSize);
+  const startNode = useAppSelector(getStartNode);
+  const endNode = useAppSelector(getEndNode);
   const dispatch = useAppDispatch();
   const { setStart, setEnd } = worldMapActions;
+
+  useEffect(() => {
+    console.log(startNode, endNode);
+  }, [startNode, endNode]);
 
   return (
     <Draggable
@@ -17,10 +23,18 @@ export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Po
       height={nodeSize}
       initialPos={{ x: pos.x * nodeSize, y: pos.y * nodeSize }}
       onDragEnd={(pos) => {
-        console.log('dragEnd', props.type, pos);
         setPos(pos);
-        if (props.type === 'start') dispatch(setStart(pos));
-        if (props.type === 'end') dispatch(setEnd(pos));
+
+        if (props.type === 'start') {
+          dispatch(setStart(pos));
+        }
+        if (props.type === 'end') {
+          dispatch(setEnd(pos));
+        }
+
+        setTimeout(() => {
+          console.log('dragEnd', props.type, pos);
+        }, 100);
       }}
     >
       <div

@@ -65,7 +65,7 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
   try {
     // initialize grid
     const grid: GridPoint[][] = [];
-    const [cols, rows] = [nodeGrid[0].length, nodeGrid.length];
+    const [rows, cols] = [ nodeGrid.length, nodeGrid[0].length];
 
     for (let i = 0; i < cols; i++) {
       grid[i] = new Array(rows);
@@ -123,9 +123,9 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 
       for (let i = 0; i < neighbors.length; i++) {
         let neighbor = neighbors[i];
-        neighbor.print(getNodeTag(current, neighbor.x, neighbor.y));
+        // neighbor.print(getNodeTag(current, neighbor.x, neighbor.y));
         
-        if (!closedSet.includes(neighbor)) {
+        if (!neighbor.blocked && !closedSet.includes(neighbor)) {
           let possibleG = current.g + 1;
 
           if (!openSet.includes(neighbor)) {
