@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/util';
 import { Pos, worldMapActions } from '../redux/modules/world-map/world-map';
 import { getEndNode, getNodeSize, getStartNode } from '../redux/modules/world-map/world-map.selector';
@@ -12,10 +12,6 @@ export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Po
   const endNode = useAppSelector(getEndNode);
   const dispatch = useAppDispatch();
   const { setStart, setEnd } = worldMapActions;
-
-  useEffect(() => {
-    console.log({ startNode, endNode });
-  }, [startNode, endNode]);
 
   return (
     <Draggable

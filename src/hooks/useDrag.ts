@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/util';
-import { getNodeSize, getSelectionMode } from '../redux/modules/world-map/world-map.selector';
+import { getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 
 export function useDrag(props: {
@@ -26,7 +26,7 @@ export function useDrag(props: {
       dispatch(setSelectionMode(SelectionMode.Dragging));
 
       const [prevX, prevY, scale] = (elementRef.current.style.transform.match(/(\d|-|\.)+/g) || [0, 0, 0]).map(Number);
-      // console.log({ prevX, prevY, scale });
+
       lastPos.current = { x: prevX, y: prevY };
       offset.current = { x: e.x, y: e.y };
 
@@ -36,8 +36,6 @@ export function useDrag(props: {
 
   const onDrag = (e: MouseEvent) => {
     if (dragging.current && elementRef.current) {
-      // console.log(elementRef.current.style.transform);
-
       elementRef.current.style.transform = `translate(
         ${lastPos.current.x + e.x - offset.current.x}px, 
         ${lastPos.current.y + e.y - offset.current.y}px
@@ -50,44 +48,31 @@ export function useDrag(props: {
     if (!id.current) return;
     dragging.current = false;
     offset.current = { x: e.x, y: e.y };
-    const pos = snapToGrid({ x: e.x, y: e.y });
-    dragEndCb(pos);
+
+    const gridEl = document.elementsFromPoint(e.x, e.y).find((el) => el.classList.contains('grid-outer-wrapper'));
+    const gridBox = gridEl?.getBoundingClientRect()!;
+    const box = elementRef.current?.getBoundingClientRect()!;
+    const targetNodePos = {
+      x: Math.round((box.x - gridBox.left) / nodeSize),
+      y: Math.round((box.y - gridBox.top) / nodeSize),
+    };
+
+    snapToGrid(targetNodePos);
+    dragEndCb(targetNodePos);
     dispatch(setSelectionMode(SelectionMode.Idle));
     id.current = null;
   };
 
-  function snapToGrid(pos: { x: number; y: number }): Pos {
-    const closestNode = document
-      .elementsFromPoint(pos.x, pos.y)
-      .find((el) => el.classList.contains('node')) as HTMLElement;
-    const gridEl = document.elementsFromPoint(pos.x, pos.y).find((el) => el.classList.contains('grid-outer-wrapper'));
-    const gridBox = gridEl?.getBoundingClientRect();
-    const closestNodeBox = closestNode?.getBoundingClientRect();
-
+  function snapToGrid(pos: Pos) {
     if (id.current) {
-      const x = parseInt(elementRef.current!.style.left);
-      const y = parseInt(elementRef.current!.style.top);
-
-      elementRef.current!.style.transform = `translate(
-        ${closestNodeBox!.x - gridBox!.left - x}px, 
-        ${closestNodeBox!.y - gridBox!.top - y}px
-      ) scale(1)`;
-
-      const posRaw = closestNode?.textContent;
-      const pos = {
-        x: Number(posRaw?.split('-')[1]),
-        y: Number(posRaw?.split('-')[0]),
-      };
-      return pos;
+      const top = pos.y * nodeSize + 'px';
+      const left = pos.x * nodeSize + 'px';
+      elementRef.current!.style.transform = `translate(0,0) scale(1)`;
+      elementRef.current!.style.top = top;
+      elementRef.current!.style.left = left;
     }
 
-    return { x: -1, y: -1 };
   }
-
-  useEffect(() => {
-    // console.log(nodeSize);
-    snapToGrid({ x: 0, y: 0 });
-  }, [nodeSize]);
 
   useEffect(() => {
     elementRef.current?.addEventListener('pointerdown', onDragStart);
