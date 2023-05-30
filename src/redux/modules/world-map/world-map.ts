@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { INITIAL_WIDTH, INITIAL_HEIGHT, INITIAL_NODE_SIZE } from '../../../utils/constants';
 
 export enum SelectionMode {
   Idle = 'Idle',
@@ -23,8 +24,6 @@ export interface Node {
   // parent: Node | undefined;
 }
 
-export const INITIAL_WIDTH = 8;
-export const INITIAL_HEIGHT = 8;
 
 export interface WorldMapState {
   width: number;
@@ -39,11 +38,11 @@ export interface WorldMapState {
 const initialState: WorldMapState = {
   width: INITIAL_WIDTH,
   height: INITIAL_HEIGHT,
-  nodeSize: 50,
+  nodeSize: INITIAL_NODE_SIZE,
   selectionMode: SelectionMode.Idle,
   nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
   start: { x: 0, y: 0 },
-  end: { x: 6, y: 6 },
+  end: { x: INITIAL_WIDTH - 1, y: INITIAL_HEIGHT - 1 },
 };
 
 export const worldMapSlice = createSlice({
@@ -64,9 +63,13 @@ export const worldMapSlice = createSlice({
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
     },
+    setNodeBlock: (state, action: PayloadAction<Node>) => {
+      const { x, y, blocked } = action.payload;
+      state.nodes[y][x] = { ...state.nodes[y][x], blocked };
+    },
     updateNode: (state, action: PayloadAction<Partial<Node> & Pos>) => {
-      const { x, y, ...values } = action.payload;
-      state.nodes[y][x] = { ...state.nodes[y][x], ...values };
+        const { x, y, ...values } = action.payload;
+        state.nodes[y][x] = { ...state.nodes[y][x], ...values };
     },
     updateNodes: (state, action: PayloadAction<Array<Partial<Node> & Pos>>) => {
       for (const node of action.payload) {
@@ -95,7 +98,7 @@ function createGrid(w: number, h: number) {
       grid[i][j] = {
         x: j,
         y: i,
-        blocked: false,
+        blocked: Math.random() > 0.9,
       };
     }
   }

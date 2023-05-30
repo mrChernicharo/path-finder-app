@@ -1,17 +1,9 @@
 import { useAppDispatch, useAppSelector } from '../redux/util';
-import {
-  getNodeSize,
-  getNodes,
-  getSelectionMode,
-  getStartNode,
-  getEndNode,
-} from '../redux/modules/world-map/world-map.selector';
-import { Pos, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
+import { getNodes, getSelectionMode, getStartNode, getEndNode } from '../redux/modules/world-map/world-map.selector';
+import { SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 import { NodeComponent } from './Node';
-import Draggable from './Draggable';
 import DestinationPoint from './DestinationPoint';
-import { generatePathIterator } from '../utils/helpers';
-import { useEffect, useState } from 'react';
+import Path from './Path';
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
@@ -20,12 +12,6 @@ export default function WorldMap() {
   const endNode = useAppSelector(getEndNode);
   const dispatch = useAppDispatch();
   const { setSelectionMode, updateNode, updateNodes } = worldMapActions;
-
-  const [generator, setGenerator] = useState<any>(generatePathIterator(nodesGrid, startNode, endNode));
-
-  useEffect(() => {
-    setGenerator(generatePathIterator(nodesGrid, startNode, endNode));
-  }, [nodesGrid, startNode, endNode]);
 
   return (
     <div>
@@ -59,61 +45,8 @@ export default function WorldMap() {
 
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
-
-        {/* <GeneratedPath /> */}
-
-        <button
-          onClick={() => {
-            setInterval(() => {
-              const { value, done } = generator.next();
-
-              if (done) return;
-
-              const { current, neighbors, openSet, closedSet, path, msg } = value;
-              console.log({ current, neighbors, openSet, closedSet, path, msg });
-
-              dispatch(
-                updateNodes(
-                  [current].map((n) => {
-                    const { x, y, blocked, f, g, h, rest } = n;
-                    return { x, y, f, g, h, blocked };
-                  })
-                )
-              );
-
-              // [current, ...neighbors].forEach(node => {
-              // })
-            }, 200);
-          }}
-        >
-          Run
-        </button>
+        <Path />
       </div>
     </div>
   );
 }
-
-// export function GeneratedPath() {
-//   const nodesGrid = useAppSelector(getNodes);
-//   const startNode = useAppSelector(getStartNode);
-//   const endNode = useAppSelector(getEndNode);
-//   const nodeSize = useAppSelector(getNodeSize);
-
-//   const [path, setPath] = useState<Pos[]>([]);
-
-//   useEffect(() => {
-//     setPath(generatePath(nodesGrid, startNode, endNode).map((point) => ({ x: point.x, y: point.y })));
-//   }, [nodesGrid, startNode, endNode]);
-
-//   return (
-//     <div>
-//       {path.map(({ x, y }) => (
-//         <div
-//           key={`${x} ${y}`}
-//           className="absolute bg-green-400 z-0"
-//           style={{ top: y * nodeSize, left: x * nodeSize, width: nodeSize, height: nodeSize }}
-//         ></div>
-//       ))}
-//     </div>
-//   );
-// }

@@ -10,8 +10,6 @@ export function NodeComponent(props: { node: Node }) {
   const nodeSize = useAppSelector(getNodeSize);
   const dispatch = useAppDispatch();
 
-  // const [blocked, setBlocked] = useState(false);
-
   const onMouseOver = (e: React.MouseEvent) => {
     e.preventDefault();
     if (selectionMode !== SelectionMode.Active) return;
@@ -35,7 +33,7 @@ export function NodeComponent(props: { node: Node }) {
       onMouseDown={onMouseDown}
     >
       <span className="select-none">
-        {row + 1}-{col + 1}
+        {row}-{col}
       </span>
     </div>
   );
