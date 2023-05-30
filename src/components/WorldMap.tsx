@@ -4,6 +4,7 @@ import { SelectionMode, worldMapActions } from '../redux/modules/world-map/world
 import { NodeComponent } from './Node';
 import DestinationPoint from './DestinationPoint';
 import Path from './Path';
+import { idMaker } from '../utils/helpers';
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
@@ -41,9 +42,9 @@ export default function WorldMap() {
       >
         <div className="border-slate-400 border-t-[1px] border-l-[1px]">
           {nodesGrid.map((row, i) => (
-            <div key={i} className="flex">
+            <div key={idMaker()} className="flex">
               {row.map((node, j) => {
-                return <NodeComponent key={'' + i + j} node={node} />;
+                return <NodeComponent key={idMaker()} node={node} />;
               })}
             </div>
           ))}

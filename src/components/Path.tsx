@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Pos } from "../redux/modules/world-map/world-map";
 import { getNodes, getStartNode, getEndNode, getNodeSize } from "../redux/modules/world-map/world-map.selector";
 import { useAppSelector } from "../redux/util";
-import { generatePath } from "../utils/helpers";
+import { generatePath, idMaker } from "../utils/helpers";
 import { usePath } from "../hooks/usePath";
 
 export default function Path() {
@@ -15,7 +15,7 @@ export default function Path() {
 
       {path.map(({ x, y }, i) => (
         <div
-          key={`${x}::${y}`}
+          key={idMaker()}
           className="absolute bg-green-400 z-0 opacity-60 pointer-events-none flex justify-center items-center"
           style={{ top: y * nodeSize, left: x * nodeSize, width: nodeSize, height: nodeSize }}
         >
