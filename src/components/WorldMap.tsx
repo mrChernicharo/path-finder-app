@@ -32,7 +32,11 @@ export default function WorldMap() {
           dispatch(setSelectionMode(SelectionMode.Idle));
         }}
         onContextMenu={(e) => {
+          console.log('right click');
           e.preventDefault();
+        }}
+        onClick={() => {
+          console.log('click');
         }}
       >
         <div className="border-slate-400 border-t-[1px] border-l-[1px]">
@@ -47,6 +51,7 @@ export default function WorldMap() {
 
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
+
         <Path />
       </div>
     </div>
