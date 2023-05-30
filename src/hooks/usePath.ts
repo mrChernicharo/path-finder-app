@@ -12,6 +12,7 @@ export function usePath() {
 
   const [active, setActive] = useState(false);
   const [path, setPath] = useState<Pos[]>([]);
+  const [neighbors, setNeighbors] = useState<Pos[]>([]);
 
   const interval = useRef<any>();
 
@@ -27,14 +28,24 @@ export function usePath() {
         return;
       }
       const pathSegment = generated[i];
-      const { x, y } = pathSegment;
+      const { x, y, neighbors } = pathSegment;
+
+      const neighborPos: Pos[] = [];
+      for (const n of neighbors) {
+        const { x, y, blocked } = n;
+        if (blocked) continue;
+        neighborPos.push({ x, y });
+      }
+
       setPath((prev) => [...prev, { x, y }]);
+      setNeighbors((prev) => [...prev, ...neighborPos]);
       i++;
     }, 100);
   }
 
   function clearPath() {
     setPath([]);
+    setNeighbors([]);
     interval.current && clearInterval(interval.current);
   }
 
@@ -48,6 +59,7 @@ export function usePath() {
 
   return {
     path,
+    neighbors,
     pathActive: active,
     togglePath() {
       if (active) {
