@@ -72,7 +72,7 @@ export function GeneratedPath() {
       {path.map(({ x, y }) => (
         <div
           key={`${x} ${y}`}
-          className="absolute bg-green-400 z-0"
+          className="absolute bg-green-400 z-0 opacity-30"
           style={{ top: y * nodeSize, left: x * nodeSize, width: nodeSize, height: nodeSize }}
         ></div>
       ))}

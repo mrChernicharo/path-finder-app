@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { INITIAL_WIDTH, INITIAL_HEIGHT, INITIAL_NODE_SIZE } from '../../utils/constants';
 
 export enum SelectionMode {
   Idle = 'Idle',
@@ -23,8 +24,6 @@ export interface Node {
   // parent: Node | undefined;
 }
 
-export const INITIAL_WIDTH = 20;
-export const INITIAL_HEIGHT = 20;
 
 export interface WorldMapState {
   width: number;
@@ -39,11 +38,11 @@ export interface WorldMapState {
 const initialState: WorldMapState = {
   width: INITIAL_WIDTH,
   height: INITIAL_HEIGHT,
-  nodeSize: 24,
+  nodeSize: INITIAL_NODE_SIZE,
   selectionMode: SelectionMode.Idle,
   nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
-  start: { x: 3, y: 2 },
-  end: { x: 16, y: 16 },
+  start: { x: 0, y: 0 },
+  end: { x: INITIAL_WIDTH - 1, y: INITIAL_HEIGHT - 1 },
 };
 
 export const worldMapSlice = createSlice({

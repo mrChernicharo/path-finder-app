@@ -17,19 +17,6 @@ function heuristic(pos0: Pos, pos1: Pos) {
   return d1 + d2;
 }
 
-function gridPoint(pos: Pos) {
-  return {
-    x: pos.x,
-    y: pos.y,
-    f: 0,
-    g: 0,
-    h: 0,
-    neighbors: [],
-    parent: undefined,
-    updateNeighbors(grid: any) {},
-  };
-}
-
 //constructor function to create all the grid points as objects containind the data for the points
 class GridPoint {
   x: number;
@@ -39,7 +26,8 @@ class GridPoint {
   h: number;
   neighbors: GridPoint[];
   parent: GridPoint | undefined;
-  constructor(x: number, y: number) {
+  blocked: boolean;
+  constructor(x: number, y: number, blocked = false) {
     this.x = x; //x location of the grid point
     this.y = y; //y location of the grid point
     this.f = 0; //total cost function
@@ -47,12 +35,13 @@ class GridPoint {
     this.h = 0; //heuristic estimated cost function from current grid point to the goal
     this.neighbors = []; // neighbors of the current grid point
     this.parent = undefined; // immediate source of the current grid point
+    this.blocked = blocked;
   }
 
   // update neighbors array for a given grid point
   updateNeighbors(grid: GridPoint[][]) {
-    let i = this.x;
-    let j = this.y;
+    let i = this.y;
+    let j = this.x;
     if (i < grid.length - 1) {
       this.neighbors.push(grid[i + 1][j]);
     }
@@ -65,6 +54,10 @@ class GridPoint {
     if (j > 0) {
       this.neighbors.push(grid[i][j - 1]);
     }
+
+  }
+  print(tag = 'curr') {
+    console.log({id: `${this.x} ${this.y}`, blocked: this.blocked, tag})
   }
 }
 
@@ -80,7 +73,7 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 
     for (let i = 0; i < cols; i++) {
       for (let j = 0; j < rows; j++) {
-        grid[i][j] = new GridPoint(i, j);
+        grid[i][j] = new GridPoint(i, j, nodeGrid[i][j].blocked);
       }
     }
 
@@ -92,8 +85,6 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 
     const start = grid[startPos.x][startPos.y];
     const end = grid[endPos.x][endPos.y];
-
-    
 
     let openSet: GridPoint[] = [start];
     let closedSet: GridPoint[] = [];
@@ -109,6 +100,7 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
         }
       }
       let current = openSet[lowestIndex];
+      current.print();
 
       if (current.x === end.x && current.y === end.y) {
         let temp = current;
@@ -131,7 +123,8 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
 
       for (let i = 0; i < neighbors.length; i++) {
         let neighbor = neighbors[i];
-
+        neighbor.print(getNodeTag(current, neighbor.x, neighbor.y));
+        
         if (!closedSet.includes(neighbor)) {
           let possibleG = current.g + 1;
 
@@ -156,3 +149,15 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     return [];
   }
 }
+
+
+const getNodeTag = (curr: GridPoint, i: number, j: number) => {
+  const { x, y } = curr;
+  if (x === i) {
+    return j < y ? 'top' : 'bottom';
+  }
+
+  if (j === y) {
+    return i < x ? 'left' : 'right';
+  }
+};

@@ -35,7 +35,7 @@ export function Node(props: { row: number; col: number; blocked: boolean }) {
       onMouseDown={onMouseDown}
     >
       <span className="select-none">
-        {row + 1}-{col + 1}
+        {row}-{col}
       </span>
     </div>
   );
