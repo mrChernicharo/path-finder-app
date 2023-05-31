@@ -99,7 +99,7 @@ function createGrid(w: number, h: number) {
         x: j,
         y: i,
         // blocked: false,
-        blocked: Math.random() > 0.8,
+        blocked: Math.random() > 0.9,
       };
     }
   }

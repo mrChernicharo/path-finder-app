@@ -8,6 +8,17 @@ export const idMaker = (length = 12) =>
     .map((item) => ID_CHARS.split('')[Math.round(Math.random() * ID_CHARS.length)])
     .join('');
 
+export function distribute(short: number, long: number) {
+  const coefficient = short / long;
+  let a = 0;
+  const distributedList = [];
+  for (let b = 0; b < long; b++) {
+    distributedList.push(Math.floor(a));
+    a = a + coefficient;
+  }
+  return distributedList;
+}
+
 //heuristic we will be using - Manhattan distance
 //for other heuristics visit - https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
 function heuristic(pos0: Pos, pos1: Pos) {
@@ -91,8 +102,14 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     const path: GridPoint[] = [];
     openSet.push(start);
 
-    // // search!
+    // initialize closedSetHistory
+    const closedSetHistory: GridPoint[][] = [];
+    let iter = 0;
+
+    // search!
     while (openSet.length > 0) {
+      closedSetHistory[iter] = [...closedSet];
+      iter++;
       //assumption lowest index is the first one to begin with
       let lowestIndex = 0;
       for (let i = 0; i < openSet.length; i++) {
@@ -110,7 +127,7 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
           temp = temp.parent;
         }
         // return the traced path
-        return path.reverse();
+        return { path: path.reverse(), closedSetHistory };
       }
 
       //remove current from openSet
@@ -141,9 +158,9 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     }
 
     //no solution by default
-    return [];
+    return { path: [], closedSetHistory };
   } catch (err) {
-    return [];
+    return { path: [], closedSetHistory: [] };
   }
 }
 

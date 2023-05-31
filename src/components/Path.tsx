@@ -16,7 +16,7 @@ export default function Path() {
       {neighbors.map(({ x, y }, i) => (
         <div
           key={idMaker()}
-          className="absolute bg-orange-400 z-0 opacity-60 pointer-events-none flex justify-center items-center"
+          className="absolute bg-orange-400 z-0 opacity-30 pointer-events-none flex justify-center items-center"
           style={{ top: y * nodeSize, left: x * nodeSize, width: nodeSize, height: nodeSize }}
         >
           <span className="text-[10px] text-white">{i}</span>
@@ -25,7 +25,7 @@ export default function Path() {
       {path.map(({ x, y }, i) => (
         <div
           key={idMaker()}
-          className="absolute bg-green-400 z-0 opacity-60 pointer-events-none flex justify-center items-center"
+          className="absolute bg-cyan-600 z-0 opacity-90 pointer-events-none flex justify-center items-center"
           style={{ top: y * nodeSize, left: x * nodeSize, width: nodeSize, height: nodeSize }}
         >
           <span className="text-[10px] text-white">{i}</span>

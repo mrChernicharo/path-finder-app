@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Pos } from '../redux/modules/world-map/world-map';
-import { generatePath } from '../utils/helpers';
+import { distribute, generatePath } from '../utils/helpers';
 import { getNodes, getStartNode, getEndNode, getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import { useAppSelector } from '../redux/util';
 
@@ -12,40 +12,46 @@ export function usePath() {
 
   const [active, setActive] = useState(false);
   const [path, setPath] = useState<Pos[]>([]);
-  const [neighbors, setNeighbors] = useState<Pos[]>([]);
+  const [visitedNodes, setVisitedNodes] = useState<Pos[]>([]);
 
   const interval = useRef<any>();
 
   function drawPath() {
     clearPath();
 
-    const generated = generatePath(nodesGrid, startNode, endNode);
+    const { path: generatedPath, closedSetHistory } = generatePath(nodesGrid, startNode, endNode);
+    console.log({ generatedPath, closedSetHistory });
+
+    const distributedIndices = distribute(generatedPath.length, closedSetHistory.length);
 
     let i = 0;
+    let highestPathIdx = 0;
     interval.current = setInterval(() => {
-      if (i >= generated.length) {
+      const currPathIdx = distributedIndices[i];
+      const currNode = generatedPath[currPathIdx];
+
+      if (i >= closedSetHistory.length || !currNode) {
         interval.current && clearInterval(interval.current);
         return;
       }
-      const pathSegment = generated[i];
-      const { x, y, neighbors } = pathSegment;
 
-      const neighborPos: Pos[] = [];
-      for (const n of neighbors) {
-        const { x, y, blocked } = n;
-        if (blocked) continue;
-        neighborPos.push({ x, y });
+      const closedSet = closedSetHistory[i]
+        .map((p) => p.neighbors.filter((n) => !n.blocked).map((p) => ({ x: p.x, y: p.y })))
+        .flat();
+
+      setVisitedNodes(closedSet);
+
+      if (highestPathIdx === currPathIdx) {
+        setPath((prev) => [...prev, { x: currNode.x, y: currNode.y }]);
+        highestPathIdx++;
       }
-
-      setPath((prev) => [...prev, { x, y }]);
-      setNeighbors((prev) => [...prev, ...neighborPos]);
       i++;
-    }, 100);
+    }, 40);
   }
 
   function clearPath() {
     setPath([]);
-    setNeighbors([]);
+    setVisitedNodes([]);
     interval.current && clearInterval(interval.current);
   }
 
@@ -59,7 +65,7 @@ export function usePath() {
 
   return {
     path,
-    neighbors,
+    neighbors: visitedNodes,
     pathActive: active,
     togglePath() {
       if (active) {
