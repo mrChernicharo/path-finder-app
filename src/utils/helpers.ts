@@ -19,6 +19,7 @@ function heuristic(pos0: Pos, pos1: Pos) {
 
 //constructor function to create all the grid points as objects containind the data for the points
 class GridPoint {
+  id: string;
   x: number;
   y: number;
   f: number;
@@ -28,6 +29,7 @@ class GridPoint {
   parent: GridPoint | undefined;
   blocked: boolean;
   constructor(row: number, col: number, blocked = false) {
+    this.id = `${row}-${col}`;
     this.x = col; //x location of the grid point
     this.y = row; //y location of the grid point
     this.f = 0; //total cost function
@@ -109,8 +111,18 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
           path.push(temp.parent);
           temp = temp.parent;
         }
-        // return the traced path
-        return path.reverse();
+
+        const pathObj: Record<string, Pos & { f: number; g: number; h: number }> = {};
+        path.reverse().forEach((gridPoint) => {
+          const { id, x, y, f, g, h } = gridPoint;
+          pathObj[id] = { x, y, f, g, h };
+        });
+        const closedSetObj: Record<string, Pos & { f: number; g: number; h: number }> = {};
+        closedSet.forEach((gridPoint) => {
+          const { id, x, y, f, g, h } = gridPoint;
+          closedSetObj[id] = { x, y,f, g, h };
+        });
+        return { pathObj, closedSetObj };
       }
 
       //remove current from openSet
@@ -141,9 +153,9 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
     }
 
     //no solution by default
-    return [];
+    return { pathObj: {}, closedSetObj: {} };
   } catch (err) {
-    return [];
+    return { pathObj: {}, closedSetObj: {} };
   }
 }
 

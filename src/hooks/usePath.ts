@@ -19,28 +19,29 @@ export function usePath() {
   function drawPath() {
     clearPath();
 
-    const generated = generatePath(nodesGrid, startNode, endNode);
+    const { pathObj, closedSetObj } = generatePath(nodesGrid, startNode, endNode);
+    console.log({ pathObj, closedSetObj });
 
     let i = 0;
     interval.current = setInterval(() => {
-      if (i >= generated.length) {
-        interval.current && clearInterval(interval.current);
-        return;
-      }
-      const pathSegment = generated[i];
-      const { x, y, neighbors } = pathSegment;
+      // if (i >= generated.length) {
+      //   interval.current && clearInterval(interval.current);
+      //   return;
+      // }
+      // const currNode = generated[i];
+      // const { x, y, neighbors } = pathSegment;
 
-      const neighborPos: Pos[] = [];
-      for (const n of neighbors) {
-        const { x, y, blocked } = n;
-        if (blocked) continue;
-        neighborPos.push({ x, y });
-      }
+      // const neighborPos: Pos[] = [];
+      // for (const n of neighbors) {
+      //   const { x, y, blocked } = n;
+      //   if (blocked) continue;
+      //   neighborPos.push({ x, y });
+      // }
 
-      setPath((prev) => [...prev, { x, y }]);
-      setNeighbors((prev) => [...prev, ...neighborPos]);
+      // setPath((prev) => [...prev, { x, y }]);
+      // setNeighbors((prev) => [...prev, ...neighborPos]);
       i++;
-    }, 100);
+    }, 30);
   }
 
   function clearPath() {
