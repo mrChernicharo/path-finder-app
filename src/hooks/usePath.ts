@@ -20,8 +20,6 @@ export function usePath() {
     clearPath();
 
     const { path: generatedPath, closedSetHistory } = generatePath(nodesGrid, startNode, endNode);
-    console.log({ generatedPath, closedSetHistory });
-
     const distributedIndices = distribute(generatedPath.length, closedSetHistory.length);
 
     let i = 0;

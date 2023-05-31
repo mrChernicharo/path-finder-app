@@ -5,13 +5,12 @@ import { useAppSelector } from '../redux/util';
 import { generatePath, idMaker } from '../utils/helpers';
 import { usePath } from '../hooks/usePath';
 
-export default function Path() {
+export default function Path(props: { path: Pos[]; neighbors: Pos[]}) {
   const nodeSize = useAppSelector(getNodeSize);
-  const { path, neighbors, pathActive, togglePath } = usePath();
+  const { path, neighbors  } = props;
 
   return (
     <div>
-      <button onClick={togglePath}>{pathActive ? 'clear' : 'run'}</button>
 
       {neighbors.map(({ x, y }, i) => (
         <div

@@ -8,6 +8,10 @@ export const idMaker = (length = 12) =>
     .map((item) => ID_CHARS.split('')[Math.round(Math.random() * ID_CHARS.length)])
     .join('');
 
+export function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(' ');
+}
+
 export function distribute(short: number, long: number) {
   const coefficient = short / long;
   let a = 0;

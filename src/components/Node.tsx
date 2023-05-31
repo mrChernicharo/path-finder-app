@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/util';
 import { getSelectionMode, getNodes, getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import { Node, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
+import { classNames } from '../utils/helpers';
 
 export function NodeComponent(props: { node: Node }) {
   const { y: row, x: col, blocked } = props.node;
@@ -24,9 +25,14 @@ export function NodeComponent(props: { node: Node }) {
 
   return (
     <div
-      className={`node row-${row} col-${col} ${
+      className={classNames(
+        `node row-${row} col-${col}`,
+        'flex gap-2 justify-center items-center text-[6px] border-slate-400 border-b-[1px] border-r-[1px] border-solid',
         blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700'
-      } flex gap-2 justify-center items-center text-[6px] border-slate-400 border-b-[1px] border-r-[1px] border-solid`}
+      )}
+      // className={`node row-${row} col-${col} ${
+      //   blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700'
+      // } flex gap-2 justify-center items-center text-[6px] border-slate-400 border-b-[1px] border-r-[1px] border-solid`}
       data-testid={`row-${row}-col-${col}`}
       style={{ width: nodeSize, height: nodeSize }}
       onMouseOver={onMouseOver}
@@ -34,3 +40,7 @@ export function NodeComponent(props: { node: Node }) {
     ></div>
   );
 }
+
+// 40376E dark
+// 7261A3 violet
+// FD5D95 pink

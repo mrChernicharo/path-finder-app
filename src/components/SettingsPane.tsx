@@ -14,16 +14,15 @@ export default function SettingsPane() {
 
   return (
     <div>
-      <div>SettingsPane</div>
-
-      <div>
-        <label htmlFor="map-width">Width</label>
+      <div className='flex items-center'>
+        <label htmlFor="map-width">width</label>
         <input
           type="range"
           name="map-width"
           min={MIN_WIDTH}
           max={MAX_WIDTH}
           value={width}
+          className='mx-2'
           onChange={(e) => {
             dispatch(setWidth(parseInt(e.target.value)));
           }}
@@ -31,14 +30,15 @@ export default function SettingsPane() {
         <span>{width}</span>
       </div>
 
-      <div>
-        <label htmlFor="map-height">Height</label>
+      <div className='flex items-center'>
+        <label htmlFor="map-height">height</label>
         <input
           type="range"
           name="map-height"
           min={MIN_HEIGHT}
           max={MAX_HEIGHT}
           value={height}
+          className='mx-2'
           onChange={(e) => {
             dispatch(setHeight(parseInt(e.target.value)));
           }}

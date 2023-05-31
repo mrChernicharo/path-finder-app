@@ -4,7 +4,8 @@ import { SelectionMode, worldMapActions } from '../redux/modules/world-map/world
 import { NodeComponent } from './Node';
 import DestinationPoint from './DestinationPoint';
 import Path from './Path';
-import { idMaker } from '../utils/helpers';
+import { classNames, idMaker } from '../utils/helpers';
+import { usePath } from '../hooks/usePath';
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
@@ -13,14 +14,18 @@ export default function WorldMap() {
   const endNode = useAppSelector(getEndNode);
   const dispatch = useAppDispatch();
   const { setSelectionMode, updateNode, updateNodes } = worldMapActions;
+  const { path, neighbors, pathActive, togglePath } = usePath();
 
   return (
     <div>
-      <div>World Map</div>
       <ul className="text-xs">
         <li>- Press left btn to block nodes</li>
         <li>- Press right btn to unblock nodes</li>
       </ul>
+
+      <button className={classNames("w-full font-bold text-xl", pathActive ? 'bg-slate-800':'bg-pink-600 ')} onClick={togglePath}>
+        {pathActive ? 'CLEAR' : 'SEARCH!'}
+      </button>
 
       <div
         className="grid-outer-wrapper relative "
@@ -53,7 +58,7 @@ export default function WorldMap() {
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
 
-        <Path />
+        <Path path={path} neighbors={neighbors} />
       </div>
     </div>
   );

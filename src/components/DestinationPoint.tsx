@@ -28,7 +28,7 @@ export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Po
       }}
     >
       <div
-        className={`${props.type === 'start' ? 'bg-green-500' : 'bg-red-500'} hover:cursor-grab`}
+        className={`${props.type === 'start' ? 'bg-cyan-500' : 'bg-pink-500'} hover:cursor-grab`}
         style={{
           width: nodeSize,
           height: nodeSize,
