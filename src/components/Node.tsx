@@ -4,7 +4,7 @@ import { getSelectionMode, getNodes, getNodeSize } from '../redux/modules/world-
 import { Node, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 
 export function NodeComponent(props: { node: Node }) {
-  const { y: row, x: col, blocked } = props.node;
+  const { y: row, x: col, f, h, g, blocked } = props.node;
   const { updateNode } = worldMapActions;
   const selectionMode = useAppSelector(getSelectionMode);
   const nodeSize = useAppSelector(getNodeSize);
@@ -31,6 +31,8 @@ export function NodeComponent(props: { node: Node }) {
       style={{ width: nodeSize, height: nodeSize }}
       onMouseOver={onMouseOver}
       onMouseDown={onMouseDown}
-    ></div>
+    >
+      {/* <span className='pointer-events-none'>{g}</span> */}
+    </div>
   );
 }

@@ -10,7 +10,7 @@ export const idMaker = (length = 12) =>
 
 //heuristic we will be using - Manhattan distance
 //for other heuristics visit - https://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
-function heuristic(pos0: Pos, pos1: Pos) {
+export function heuristic(pos0: Pos, pos1: Pos) {
   let d1 = Math.abs(pos1.x - pos0.x);
   let d2 = Math.abs(pos1.y - pos0.y);
 
@@ -18,7 +18,7 @@ function heuristic(pos0: Pos, pos1: Pos) {
 }
 
 //constructor function to create all the grid points as objects containind the data for the points
-class GridPoint {
+export class GridPoint {
   id: string;
   x: number;
   y: number;
@@ -112,15 +112,15 @@ export function generatePath(nodeGrid: Node[][], startPos: Pos, endPos: Pos) {
           temp = temp.parent;
         }
 
-        const pathObj: Record<string, Pos & { f: number; g: number; h: number }> = {};
+        const pathObj: Record<string, Node> = {};
         path.reverse().forEach((gridPoint) => {
-          const { id, x, y, f, g, h } = gridPoint;
-          pathObj[id] = { x, y, f, g, h };
+          const { id, x, y, f, g, h, blocked } = gridPoint;
+          pathObj[id] = { id, x, y, f, g, h, blocked };
         });
-        const closedSetObj: Record<string, Pos & { f: number; g: number; h: number }> = {};
+        const closedSetObj: Record<string, Node> = {};
         closedSet.forEach((gridPoint) => {
-          const { id, x, y, f, g, h } = gridPoint;
-          closedSetObj[id] = { x, y,f, g, h };
+          const { id, x, y, f, g, h, blocked } = gridPoint;
+          closedSetObj[id] = { id, x, y, f, g, h, blocked };
         });
         return { pathObj, closedSetObj };
       }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Pos } from '../redux/modules/world-map/world-map';
+import { Node, Pos } from '../redux/modules/world-map/world-map';
 import { generatePath } from '../utils/helpers';
 import { getNodes, getStartNode, getEndNode, getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import { useAppSelector } from '../redux/util';
@@ -20,26 +20,25 @@ export function usePath() {
     clearPath();
 
     const { pathObj, closedSetObj } = generatePath(nodesGrid, startNode, endNode);
-    console.log({ pathObj, closedSetObj });
+    const [pathArr, closedSetArr] = [Object.values(pathObj), Object.values(closedSetObj)];
 
     let i = 0;
     interval.current = setInterval(() => {
-      // if (i >= generated.length) {
-      //   interval.current && clearInterval(interval.current);
-      //   return;
-      // }
-      // const currNode = generated[i];
-      // const { x, y, neighbors } = pathSegment;
+      if (i >= pathArr.length) {
+        console.log('done');
+        interval.current && clearInterval(interval.current);
+        return;
+      }
+      const currNode = pathArr[i];
 
-      // const neighborPos: Pos[] = [];
-      // for (const n of neighbors) {
-      //   const { x, y, blocked } = n;
-      //   if (blocked) continue;
-      //   neighborPos.push({ x, y });
-      // }
+      const neighbors = closedSetArr
+        .filter((point) => point.id !== currNode.id && point.g < currNode.g)
+        .map(({ x, y }) => ({ x, y }));
 
-      // setPath((prev) => [...prev, { x, y }]);
-      // setNeighbors((prev) => [...prev, ...neighborPos]);
+      setPath((prev) => [...prev, { x: currNode.x, y: currNode.y }]);
+      setNeighbors((prev) => neighbors);
+      // setNeighbors((prev) => [...prev, ...neighbors]);
+
       i++;
     }, 30);
   }
