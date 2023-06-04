@@ -11,8 +11,8 @@ export function usePath() {
   const nodeSize = useAppSelector(getNodeSize);
 
   const [active, setActive] = useState(false);
-  const [path, setPath] = useState<Pos[]>([]);
-  const [neighbors, setNeighbors] = useState<Pos[]>([]);
+  const [path, setPath] = useState<Node[]>([]);
+  const [neighbors, setNeighbors] = useState<Node[]>([]);
 
   const interval = useRef<any>();
 
@@ -20,12 +20,13 @@ export function usePath() {
     clearPath();
 
     const { pathObj, closedSetObj } = generatePath(nodesGrid, startNode, endNode);
-    const [pathArr, closedSetArr] = [Object.values(pathObj), Object.values(closedSetObj)];
+    const pathArr = Object.values(pathObj);
+    const closedSetArr = Object.values(closedSetObj);
+    console.log({ closedSetArr });
 
     let i = 0;
     interval.current = setInterval(() => {
       if (i >= pathArr.length) {
-        console.log('done');
         interval.current && clearInterval(interval.current);
         return;
       }
@@ -33,12 +34,10 @@ export function usePath() {
 
       const neighbors = closedSetArr
         .filter((point) => point.id !== currNode.id && point.g < currNode.g)
-        .map(({ x, y }) => ({ x, y }));
+        // .map(({ x, y }) => ({ x, y }));
 
-      setPath((prev) => [...prev, { x: currNode.x, y: currNode.y }]);
-      setNeighbors((prev) => neighbors);
-      // setNeighbors((prev) => [...prev, ...neighbors]);
-
+      setPath((prev) => [...prev, { ...currNode }]);
+      setNeighbors(neighbors);
       i++;
     }, 30);
   }

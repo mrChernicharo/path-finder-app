@@ -32,7 +32,7 @@ export function NodeComponent(props: { node: Node }) {
       onMouseOver={onMouseOver}
       onMouseDown={onMouseDown}
     >
-      {/* <span className='pointer-events-none'>{g}</span> */}
+      <span className='pointer-events-none'></span>
     </div>
   );
 }

@@ -5,6 +5,8 @@ import { NodeComponent } from './Node';
 import DestinationPoint from './DestinationPoint';
 import Path from './Path';
 import { idMaker } from '../utils/helpers';
+import Neighbors from './Neighbors';
+import { usePath } from '../hooks/usePath';
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
@@ -13,6 +15,7 @@ export default function WorldMap() {
   const endNode = useAppSelector(getEndNode);
   const dispatch = useAppDispatch();
   const { setSelectionMode, updateNode, updateNodes } = worldMapActions;
+  const { path, neighbors, pathActive, togglePath } = usePath();
 
   return (
     <div>
@@ -21,6 +24,8 @@ export default function WorldMap() {
         <li>- Press left btn to block nodes</li>
         <li>- Press right btn to unblock nodes</li>
       </ul>
+
+      <button onClick={togglePath}>{pathActive ? 'clear' : 'run'}</button>
 
       <div
         className="grid-outer-wrapper relative "
@@ -53,7 +58,8 @@ export default function WorldMap() {
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
 
-        <Path />
+        <Path path={path} />
+        <Neighbors neighbors={neighbors} />
       </div>
     </div>
   );

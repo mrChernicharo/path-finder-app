@@ -107,7 +107,7 @@ function createGrid(
       const pos = { x: j, y: i };
       const g = heuristic(start, pos);
       const h = heuristic(pos, end);
-      const f = g+h;
+      const f = g + h;
 
       grid[i][j] = { id: `n-${i}-${j}`, blocked: Math.random() > 0.86, g, h, f, ...pos };
     }
