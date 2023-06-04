@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -31,7 +30,6 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  /* justify-content: center; */
   min-width: 320px;
   width: 100vw;
   min-height: 100vh;
@@ -40,6 +38,9 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+input {
+  accent-color: #747bff;
 }
 
 button {
@@ -56,9 +57,11 @@ button {
 button:hover {
   border-color: #646cff;
 }
+input:focus,
+input:focus-visible,
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto #747bff;
 }
 
 @media (prefers-color-scheme: light) {

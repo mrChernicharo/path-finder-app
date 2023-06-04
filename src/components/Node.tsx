@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/util';
-import { getSelectionMode, getNodes, getNodeSize } from '../redux/modules/world-map/world-map.selector';
+import { getSelectionMode, getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import { Node, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
+import { klasss } from '../utils/helpers';
 
 export function NodeComponent(props: { node: Node }) {
   const { y: row, x: col, f, h, g, blocked } = props.node;
@@ -24,15 +24,17 @@ export function NodeComponent(props: { node: Node }) {
 
   return (
     <div
-      className={`node row-${row} col-${col} ${
-        blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700'
-      } flex gap-2 justify-center items-center text-[6px] border-slate-400 border-b-[1px] border-r-[1px] border-solid`}
+      className={klasss(
+        `node row-${row} col-${col}`,
+        blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700',
+        `flex flex-shrink-0 gap-2 justify-center items-center text-[6px] border-slate-400 border-b-[1px] border-r-[1px] border-solid`
+      )}
       data-testid={`row-${row}-col-${col}`}
       style={{ width: nodeSize, height: nodeSize }}
       onMouseOver={onMouseOver}
       onMouseDown={onMouseDown}
     >
-      <span className='pointer-events-none'></span>
+      <span className="pointer-events-none"></span>
     </div>
   );
 }

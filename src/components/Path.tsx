@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Node, Pos } from '../redux/modules/world-map/world-map';
 import { getNodes, getStartNode, getEndNode, getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import { useAppSelector } from '../redux/util';
-import { generatePath, idMaker } from '../utils/helpers';
+import { idMaker } from '../utils/helpers';
 import { usePath } from '../hooks/usePath';
 
 export default function Path(props: { path: Node[] }) {

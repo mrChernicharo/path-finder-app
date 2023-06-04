@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { INITIAL_WIDTH, INITIAL_HEIGHT, INITIAL_NODE_SIZE } from '../../../utils/constants';
-import { heuristic } from '../../../utils/helpers';
+import { heuristic } from '../../../utils/a-start';
 
 export enum SelectionMode {
   Idle = 'Idle',
@@ -65,10 +65,6 @@ export const worldMapSlice = createSlice({
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
     },
-    setNodeBlock: (state, action: PayloadAction<Node>) => {
-      const { x, y, blocked } = action.payload;
-      state.nodes[y][x] = { ...state.nodes[y][x], blocked };
-    },
     updateNode: (state, action: PayloadAction<Partial<Node> & Pos>) => {
       const { x, y, ...values } = action.payload;
       state.nodes[y][x] = { ...state.nodes[y][x], ...values };
@@ -82,11 +78,11 @@ export const worldMapSlice = createSlice({
 
     setStart: (state, action: PayloadAction<Pos>) => {
       state.start = action.payload;
-      state.nodes = createGrid(state.width, state.height, state.start, state.end);
+      // state.nodes = createGrid(state.width, state.height, state.start, state.end);
     },
     setEnd: (state, action: PayloadAction<Pos>) => {
       state.end = action.payload;
-      state.nodes = createGrid(state.width, state.height, state.start, state.end);
+      // state.nodes = createGrid(state.width, state.height, state.start, state.end);
     },
   },
 });
@@ -109,7 +105,8 @@ function createGrid(
       const h = heuristic(pos, end);
       const f = g + h;
 
-      grid[i][j] = { id: `n-${i}-${j}`, blocked: Math.random() > 0.86, g, h, f, ...pos };
+      grid[i][j] = { id: `n-${i}-${j}`, blocked: false, g, h, f, ...pos };
+      // grid[i][j] = { id: `n-${i}-${j}`, blocked: Math.random() > 0.86, g, h, f, ...pos };
     }
   }
   return grid;

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Node, Pos } from '../redux/modules/world-map/world-map';
-import { generatePath } from '../utils/helpers';
 import { getNodes, getStartNode, getEndNode, getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import { useAppSelector } from '../redux/util';
+import { generatePath } from '../utils/a-start';
 
 export function usePath() {
   const nodesGrid = useAppSelector(getNodes);

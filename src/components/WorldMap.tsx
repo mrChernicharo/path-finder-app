@@ -18,17 +18,11 @@ export default function WorldMap() {
   const { path, neighbors, pathActive, togglePath } = usePath();
 
   return (
-    <div>
-      <div>World Map</div>
-      <ul className="text-xs">
-        <li>- Press left btn to block nodes</li>
-        <li>- Press right btn to unblock nodes</li>
-      </ul>
-
+    <div className="w-screen text-center">
       <button onClick={togglePath}>{pathActive ? 'clear' : 'run'}</button>
 
       <div
-        className="grid-outer-wrapper relative "
+        className="grid-outer-wrapper relative"
         onMouseDown={(e) => {
           (e.buttons === 1 || e.buttons === 2) &&
             selectionMode === SelectionMode.Idle &&
@@ -37,15 +31,17 @@ export default function WorldMap() {
         onMouseUp={(e) => {
           dispatch(setSelectionMode(SelectionMode.Idle));
         }}
-        onContextMenu={(e) => {
-          console.log('right click');
-          e.preventDefault();
-        }}
         onClick={() => {
           console.log('click');
         }}
       >
-        <div className="border-slate-400 border-t-[1px] border-l-[1px]">
+        <div
+          className="border-slate-400 border-l-[1px]"
+          onContextMenu={(e) => {
+            console.log('right click');
+            e.preventDefault();
+          }}
+        >
           {nodesGrid.map((row, i) => (
             <div key={idMaker()} className="flex">
               {row.map((node, j) => {
