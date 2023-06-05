@@ -10,14 +10,29 @@ const BTN_TEXT: Record<PathStatus, string> = {
   [PathStatus.Fail]: 'check your board and run it again!',
 };
 
+const BTN_COLOR: Record<PathStatus, string> = {
+  [PathStatus.Idle]: '#cf34fd',
+  [PathStatus.Active]: '#000',
+  [PathStatus.Done]: '#cf34fd',
+  [PathStatus.Fail]: 'red',
+};
+
 export default function ActionBtns() {
   const pathStatus = useAppSelector(getPathStatus);
   const { togglePath, clearPath } = usePath();
 
   return (
     <div className="flex justify-center my-5">
-      <button className='bg-[#cf34fd] uppercase' onClick={togglePath}>{BTN_TEXT[pathStatus]}</button>
-      <button onClick={clearPath}>clear</button>
+      <button
+        className="uppercase"
+        onClick={togglePath}
+        style={{
+          background: BTN_COLOR[pathStatus],
+        }}
+      >
+        {BTN_TEXT[pathStatus]}
+      </button>
+      {pathStatus === PathStatus.Done ? <button onClick={clearPath}>clear</button> : null}
     </div>
   );
 }
