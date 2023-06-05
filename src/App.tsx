@@ -6,7 +6,7 @@ import WorldMap from './components/WorldMap';
 import { usePath } from './hooks/usePath';
 
 function App() {
-  const { path, neighbors, pathActive, togglePath } = usePath();
+  const { togglePath } = usePath();
   return (
     <div>
       <h1>Path finder</h1>
@@ -18,8 +18,8 @@ function App() {
       <PathStatusDisplay />
       <GestureDisplay />
 
-      <ActionBtn pathActive={pathActive} togglePath={togglePath} />
-      <WorldMap path={path} neighbors={neighbors} />
+      <ActionBtn togglePath={togglePath} />
+      <WorldMap />
     </div>
   );
 }
