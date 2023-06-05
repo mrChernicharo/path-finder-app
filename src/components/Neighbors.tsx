@@ -8,10 +8,10 @@ export default function Neighbors(props: { neighbors: Node[] }) {
   const nodeSize = useAppSelector(getNodeSize);
 
   return (
-    <div>
+    <>
       {props.neighbors.map(({ x, y, g }) => (
         <Tile key={`tile-${y}-${x}`} x={x} y={y} g={g} color="orange" />
       ))}
-    </div>
+    </>
   );
 }

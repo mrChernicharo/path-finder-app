@@ -33,7 +33,7 @@ export default function Draggable(props: DraggableProps) {
   });
 
   return (
-    <div id={idMaker()} className="absolute z-10" style={{ width, height, top: y, left: x }} ref={elementRef}>
+    <div id={`draggable-${idMaker()}`} className="absolute z-10" style={{ width, height, top: y, left: x }} ref={elementRef}>
       {children}
     </div>
   );

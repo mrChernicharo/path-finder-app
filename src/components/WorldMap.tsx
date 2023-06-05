@@ -17,12 +17,12 @@ export default function WorldMap() {
   const { path, neighbors, pathActive, togglePath } = usePath();
 
   return (
-    <div className="w-screen">
+    <div className="w-screen  ">
 
       <button onClick={togglePath}>{pathActive ? 'clear' : 'run path finder!'}</button>
 
       <div
-        className="grid-outer-wrapper relative"
+        className="grid-outer-wrapper w-min mx-auto relative border-dashed border-red-600 border-4"
         onMouseDown={(e) => {
           (e.buttons === 1 || e.buttons === 2) &&
             selectionMode === SelectionMode.Idle &&
