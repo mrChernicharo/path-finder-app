@@ -8,6 +8,7 @@ const BTN_TEXT: Record<PathStatus, string> = {
   [PathStatus.Idle]:'run path finder!',
   [PathStatus.Active]:'clear' ,
   [PathStatus.Done]:'run again!',
+  [PathStatus.Fail]:'Remove some walls and Run it again!',
 }
 
 export default function ActionBtn(props: { togglePath: () => void }) {

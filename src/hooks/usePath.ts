@@ -6,6 +6,7 @@ import {
   getEndNode,
   getNeighbors,
   getPathStatus,
+  getPath,
 } from '../redux/modules/world-map/world-map.selector';
 import { useAppDispatch, useAppSelector } from '../redux/util';
 import { generatePath } from '../utils/a-start';
@@ -15,6 +16,7 @@ export function usePath() {
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
   const pathStatus = useAppSelector(getPathStatus);
+  const path = useAppSelector(getPath);
 
   const { setPathStatus, setPath, setNeighbors } = worldMapActions;
   const dispatch = useAppDispatch();
@@ -28,6 +30,11 @@ export function usePath() {
     const pathArr = Object.values(pathObj);
     const closedSetArr = Object.values(closedSetObj);
 
+    if (!pathArr.length) {
+      dispatch(setPathStatus(PathStatus.Fail));
+      return;
+    }
+
     let i = 0;
     interval.current = setInterval(() => {
       if (i >= pathArr.length) {
@@ -36,7 +43,7 @@ export function usePath() {
         return;
       }
       const currNode = pathArr[i];
-      const currPath = pathArr.slice(0, i);
+      const currPath = pathArr.slice(0, i + 1);
       const currNeighbors = closedSetArr.filter((point) => point.id !== currNode.id && point.g < currNode.g);
 
       dispatch(setPath(currPath));

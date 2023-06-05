@@ -1,7 +1,7 @@
 import { Node } from '../redux/modules/world-map/world-map';
 import { getNodes } from '../redux/modules/world-map/world-map.selector';
 import { useAppSelector } from '../redux/util';
-import { NodeComponent } from './Node';
+import { AppNode } from './AppNode';
 
 export default function NodeGrid() {
   const nodesGrid = useAppSelector(getNodes);
@@ -11,7 +11,7 @@ export default function NodeGrid() {
       {nodesGrid.map((row, i) => (
         <div key={i} className="flex">
           {row.map((node, j) => {
-            return <NodeComponent key={`${i}-${j}`} node={node} />;
+            return <AppNode key={`${i}-${j}`} node={node} />;
           })}
         </div>
       ))}

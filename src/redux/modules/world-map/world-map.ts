@@ -13,6 +13,7 @@ export enum PathStatus {
   Idle = 'Idle',
   Active = 'Drawing...',
   Done = 'Done!',
+  Fail = "No Solution!"
 }
 
 export interface Pos {
