@@ -16,7 +16,7 @@ export function usePath() {
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
   const pathStatus = useAppSelector(getPathStatus);
-  const path = useAppSelector(getPath);
+  // const path = useAppSelector(getPath);
 
   const { setPathStatus, setPath, setNeighbors } = worldMapActions;
   const dispatch = useAppDispatch();
@@ -44,12 +44,12 @@ export function usePath() {
       }
       const currNode = pathArr[i];
       const currPath = pathArr.slice(0, i + 1);
-      const currNeighbors = closedSetArr.filter((point) => point.id !== currNode.id && point.g < currNode.g);
+      const currNeighbors = closedSetArr.filter((point) => point.id !== currNode.id && point.g <= currNode.g);
 
       dispatch(setPath(currPath));
       dispatch(setNeighbors(currNeighbors));
       i++;
-    }, 30);
+    }, 40);
   }
 
   function clearPath() {

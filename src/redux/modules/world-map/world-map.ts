@@ -13,7 +13,7 @@ export enum PathStatus {
   Idle = 'Idle',
   Active = 'Drawing...',
   Done = 'Done!',
-  Fail = "No Solution!"
+  Fail = 'No Solution!',
 }
 
 export interface Pos {
@@ -67,10 +67,16 @@ export const worldMapSlice = createSlice({
     setWidth: (state, action: PayloadAction<number>) => {
       state.width = action.payload;
       state.nodes = createGrid(state.width, state.height, state.start, state.end);
+      state.path = [];
+      state.neighbors = [];
+      state.pathStatus = PathStatus.Idle;
     },
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
       state.nodes = createGrid(state.width, state.height, state.start, state.end);
+      state.path = [];
+      state.neighbors = [];
+      state.pathStatus = PathStatus.Idle;
     },
     setNodeSize: (state, action: PayloadAction<number>) => {
       state.nodeSize = action.payload;
@@ -125,7 +131,6 @@ function createGrid(
       const f = g + h;
 
       grid[i][j] = { id: `n-${i}-${j}`, blocked: false, g, h, f, ...pos };
-      // grid[i][j] = { id: `n-${i}-${j}`, blocked: Math.random() > 0.86, g, h, f, ...pos };
     }
   }
   return grid;

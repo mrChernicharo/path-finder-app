@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useDrag } from '../hooks/useDrag';
 import { idMaker } from '../utils/helpers';
 import { Pos } from '../redux/modules/world-map/world-map';
@@ -6,7 +6,7 @@ import { Pos } from '../redux/modules/world-map/world-map';
 interface DraggableProps {
   width: number;
   height: number;
-  initialPos: Pos;
+  pos: Pos;
   onDragEnd: (pos: Pos) => void;
   children: ReactNode;
 }
@@ -17,7 +17,7 @@ export default function Draggable(props: DraggableProps) {
     height,
     children,
     onDragEnd,
-    initialPos: { x, y },
+    pos: { x, y },
   } = props;
 
   const { elementRef } = useDrag({
@@ -33,7 +33,12 @@ export default function Draggable(props: DraggableProps) {
   });
 
   return (
-    <div id={`draggable-${idMaker()}`} className="absolute z-10" style={{ width, height, top: y, left: x }} ref={elementRef}>
+    <div
+      id={`draggable-${idMaker()}`}
+      className="absolute z-10"
+      style={{ width, height, top: y, left: x }}
+      ref={elementRef}
+    >
       {children}
     </div>
   );

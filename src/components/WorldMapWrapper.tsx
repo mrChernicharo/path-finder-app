@@ -3,6 +3,7 @@ import { getSelectionMode } from '../redux/modules/world-map/world-map.selector'
 import { SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 import { klasss } from '../utils/helpers';
 import { ReactNode } from 'react';
+import { GRID_WRAPPER_ID } from '../hooks/useDrag';
 
 export default function WorldMapWrapper(props: { children: ReactNode }) {
   const { setSelectionMode } = worldMapActions;
@@ -12,8 +13,8 @@ export default function WorldMapWrapper(props: { children: ReactNode }) {
   return (
     <div className="w-screen">
       <div
+        id={GRID_WRAPPER_ID}
         className={klasss(
-          'grid-outer-wrapper',
           'w-min mx-auto relative'
           /* , 'border-dashed border-red-600 border-4'*/
         )}

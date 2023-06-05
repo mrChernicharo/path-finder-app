@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/util';
 import { Pos, worldMapActions } from '../redux/modules/world-map/world-map';
 import { getNodeSize } from '../redux/modules/world-map/world-map.selector';
@@ -9,16 +9,12 @@ export default function DestinationPoint(props: { type: 'start' | 'end'; pos: Po
   const nodeSize = useAppSelector(getNodeSize);
   const dispatch = useAppDispatch();
 
-  const [pos, setPos] = useState(props.pos);
-
   return (
     <Draggable
       width={nodeSize}
       height={nodeSize}
-      initialPos={{ x: pos.x * nodeSize, y: pos.y * nodeSize }}
+      pos={{ x: props.pos.x * nodeSize, y: props.pos.y * nodeSize }}
       onDragEnd={(position) => {
-        setPos(position);
-
         if (props.type === 'start') {
           dispatch(setStart(position));
         }
