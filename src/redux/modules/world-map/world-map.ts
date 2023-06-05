@@ -9,6 +9,12 @@ export enum SelectionMode {
   Dragging = 'Dragging',
 }
 
+export enum PathStatus {
+  Idle = 'Idle',
+  Active = 'Drawing...',
+  Done = 'Done!',
+}
+
 export interface Pos {
   x: number;
   y: number;
@@ -35,6 +41,9 @@ export interface WorldMapState {
   nodes: Node[][];
   start: Pos;
   end: Pos;
+  path: Node[];
+  neighbors: Node[];
+  pathStatus: PathStatus;
 }
 
 const initialState: WorldMapState = {
@@ -45,6 +54,9 @@ const initialState: WorldMapState = {
   nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
   start: { x: 0, y: 0 },
   end: { x: INITIAL_WIDTH - 1, y: INITIAL_HEIGHT - 1 },
+  path: [],
+  neighbors: [],
+  pathStatus: PathStatus.Idle,
 };
 
 export const worldMapSlice = createSlice({
@@ -75,12 +87,20 @@ export const worldMapSlice = createSlice({
         state.nodes[y][x] = { ...state.nodes[y][x], ...values };
       }
     },
-
     setStart: (state, action: PayloadAction<Pos>) => {
       state.start = action.payload;
     },
     setEnd: (state, action: PayloadAction<Pos>) => {
       state.end = action.payload;
+    },
+    setPath: (state, action: PayloadAction<Node[]>) => {
+      state.path = action.payload;
+    },
+    setNeighbors: (state, action: PayloadAction<Node[]>) => {
+      state.neighbors = action.payload;
+    },
+    setPathStatus: (state, action: PayloadAction<PathStatus>) => {
+      state.pathStatus = action.payload;
     },
   },
 });

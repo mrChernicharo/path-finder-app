@@ -1,28 +1,29 @@
 import { useAppDispatch, useAppSelector } from '../redux/util';
 import { getNodes, getSelectionMode, getStartNode, getEndNode } from '../redux/modules/world-map/world-map.selector';
-import { SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
+import { Node, SelectionMode, worldMapActions } from '../redux/modules/world-map/world-map';
 import DestinationPoint from './DestinationPoint';
 import Path from './Path';
 import Neighbors from './Neighbors';
 import { usePath } from '../hooks/usePath';
 import NodeGrid from './NodeGrid';
+import { klasss } from '../utils/helpers';
 
-export default function WorldMap() {
-  const nodesGrid = useAppSelector(getNodes);
+export default function WorldMap(props: { path: Node[], neighbors: Node[] } ) {
   const selectionMode = useAppSelector(getSelectionMode);
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
   const dispatch = useAppDispatch();
   const { setSelectionMode } = worldMapActions;
-  const { path, neighbors, pathActive, togglePath } = usePath();
+  const { path, neighbors } = props;
 
   return (
-    <div className="w-screen  ">
-
-      <button onClick={togglePath}>{pathActive ? 'clear' : 'run path finder!'}</button>
-
+    <div className="w-screen">
       <div
-        className="grid-outer-wrapper w-min mx-auto relative border-dashed border-red-600 border-4"
+        className={klasss(
+          'grid-outer-wrapper',
+          'w-min mx-auto relative'
+          /* , 'border-dashed border-red-600 border-4'*/
+        )}
         onMouseDown={(e) => {
           (e.buttons === 1 || e.buttons === 2) &&
             selectionMode === SelectionMode.Idle &&
@@ -34,14 +35,16 @@ export default function WorldMap() {
         onClick={() => {
           console.log('click');
         }}
+        onContextMenu={(e) => {
+          e.preventDefault();
+        }}
       >
-        <NodeGrid nodesGrid={nodesGrid} />
+        <NodeGrid />
+        <Neighbors neighbors={neighbors} />
+        <Path path={path} />
 
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
-
-        <Neighbors neighbors={neighbors} />
-        <Path path={path} />
       </div>
     </div>
   );

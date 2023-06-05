@@ -1,19 +1,22 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Node, Pos } from '../redux/modules/world-map/world-map';
+import { PathStatus, Node, Pos, worldMapActions } from '../redux/modules/world-map/world-map';
 import { getNodes, getStartNode, getEndNode, getNodeSize } from '../redux/modules/world-map/world-map.selector';
-import { useAppSelector } from '../redux/util';
+import { useAppDispatch, useAppSelector } from '../redux/util';
 import { generatePath } from '../utils/a-start';
 
 export function usePath() {
   const nodesGrid = useAppSelector(getNodes);
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
+  const { setPathStatus } = worldMapActions;
+  const dispatch = useAppDispatch();
 
   const [active, setActive] = useState(false);
   const [path, setPath] = useState<Node[]>([]);
   const [neighbors, setNeighbors] = useState<Node[]>([]);
 
   const interval = useRef<any>();
+  
 
   function drawPath() {
     clearPath();
@@ -26,11 +29,12 @@ export function usePath() {
     interval.current = setInterval(() => {
       if (i >= pathArr.length) {
         interval.current && clearInterval(interval.current);
+        dispatch(setPathStatus(PathStatus.Done))
         return;
       }
       const currNode = pathArr[i];
       const neighbors = closedSetArr.filter((point) => point.id !== currNode.id && point.g < currNode.g);
-      
+
       setPath((prev) => [...prev, { ...currNode }]);
       setNeighbors(neighbors);
       i++;
@@ -58,9 +62,11 @@ export function usePath() {
     togglePath() {
       if (active) {
         setActive(false);
+        dispatch(setPathStatus(PathStatus.Idle));
         clearPath();
       } else {
         setActive(true);
+        dispatch(setPathStatus(PathStatus.Active));
         drawPath();
       }
     },

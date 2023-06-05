@@ -7,6 +7,9 @@ export const getMapWidth = createSelector(selectSelf, ({ worldMap }) => worldMap
 export const getMapHeight = createSelector(selectSelf, ({ worldMap }) => worldMap.height);
 export const getNodeSize = createSelector(selectSelf, ({ worldMap }) => worldMap.nodeSize);
 export const getSelectionMode = createSelector(selectSelf, ({ worldMap }) => worldMap.selectionMode);
+export const getPathStatus = createSelector(selectSelf, ({ worldMap }) => worldMap.pathStatus);
+export const getPath = createSelector(selectSelf, ({ worldMap }) => worldMap.path);
+export const getNeighbors = createSelector(selectSelf, ({ worldMap }) => worldMap.neighbors);
 export const getStartNode = createSelector(selectSelf, ({ worldMap }) => worldMap.start);
 export const getEndNode = createSelector(selectSelf, ({ worldMap }) => worldMap.end);
 export const getNodes = createSelector(selectSelf, ({ worldMap }) => worldMap.nodes);
