@@ -78,11 +78,9 @@ export const worldMapSlice = createSlice({
 
     setStart: (state, action: PayloadAction<Pos>) => {
       state.start = action.payload;
-      // state.nodes = createGrid(state.width, state.height, state.start, state.end);
     },
     setEnd: (state, action: PayloadAction<Pos>) => {
       state.end = action.payload;
-      // state.nodes = createGrid(state.width, state.height, state.start, state.end);
     },
   },
 });

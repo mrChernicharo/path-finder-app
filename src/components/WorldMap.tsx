@@ -7,6 +7,7 @@ import Path from './Path';
 import { idMaker } from '../utils/helpers';
 import Neighbors from './Neighbors';
 import { usePath } from '../hooks/usePath';
+import NodeGrid from './NodeGrid';
 
 export default function WorldMap() {
   const nodesGrid = useAppSelector(getNodes);
@@ -18,8 +19,9 @@ export default function WorldMap() {
   const { path, neighbors, pathActive, togglePath } = usePath();
 
   return (
-    <div className="w-screen text-center">
-      <button onClick={togglePath}>{pathActive ? 'clear' : 'run'}</button>
+    <div className="w-screen">
+
+      <button onClick={togglePath}>{pathActive ? 'clear' : 'run path finder!'}</button>
 
       <div
         className="grid-outer-wrapper relative"
@@ -35,27 +37,13 @@ export default function WorldMap() {
           console.log('click');
         }}
       >
-        <div
-          className="border-slate-400 border-l-[1px]"
-          onContextMenu={(e) => {
-            console.log('right click');
-            e.preventDefault();
-          }}
-        >
-          {nodesGrid.map((row, i) => (
-            <div key={idMaker()} className="flex">
-              {row.map((node, j) => {
-                return <NodeComponent key={idMaker()} node={node} />;
-              })}
-            </div>
-          ))}
-        </div>
+        <NodeGrid nodesGrid={nodesGrid} />
 
         <DestinationPoint type="start" pos={startNode} />
         <DestinationPoint type="end" pos={endNode} />
 
-        <Path path={path} />
         <Neighbors neighbors={neighbors} />
+        <Path path={path} />
       </div>
     </div>
   );

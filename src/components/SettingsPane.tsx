@@ -7,7 +7,6 @@ export default function SettingsPane() {
   const width = useAppSelector(getMapWidth);
   const height = useAppSelector(getMapHeight);
   const nodeSize = useAppSelector(getNodeSize);
-  const nodes = useAppSelector(getNodes);
   const dispatch = useAppDispatch();
 
   const { setWidth, setHeight, setNodeSize } = worldMapActions;

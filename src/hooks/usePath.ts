@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Node, Pos } from '../redux/modules/world-map/world-map';
 import { getNodes, getStartNode, getEndNode, getNodeSize } from '../redux/modules/world-map/world-map.selector';
 import { useAppSelector } from '../redux/util';
@@ -8,7 +8,6 @@ export function usePath() {
   const nodesGrid = useAppSelector(getNodes);
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
-  const nodeSize = useAppSelector(getNodeSize);
 
   const [active, setActive] = useState(false);
   const [path, setPath] = useState<Node[]>([]);
@@ -22,7 +21,6 @@ export function usePath() {
     const { pathObj, closedSetObj } = generatePath(nodesGrid, startNode, endNode);
     const pathArr = Object.values(pathObj);
     const closedSetArr = Object.values(closedSetObj);
-    console.log({ closedSetArr });
 
     let i = 0;
     interval.current = setInterval(() => {
@@ -31,11 +29,8 @@ export function usePath() {
         return;
       }
       const currNode = pathArr[i];
-
-      const neighbors = closedSetArr
-        .filter((point) => point.id !== currNode.id && point.g < currNode.g)
-        // .map(({ x, y }) => ({ x, y }));
-
+      const neighbors = closedSetArr.filter((point) => point.id !== currNode.id && point.g < currNode.g);
+      
       setPath((prev) => [...prev, { ...currNode }]);
       setNeighbors(neighbors);
       i++;
@@ -48,13 +43,13 @@ export function usePath() {
     interval.current && clearInterval(interval.current);
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (active) {
       // changed any blocked tile in the way?
       // true draw path : false do nothing
       drawPath();
     }
-  }, [nodesGrid, startNode, endNode, active]);
+  }, []);
 
   return {
     path,
