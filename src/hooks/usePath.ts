@@ -67,6 +67,7 @@ export function usePath() {
   }, []);
 
   return {
+    clearPath,
     togglePath() {
       if (pathStatus === PathStatus.Active) {
         dispatch(setPathStatus(PathStatus.Idle));

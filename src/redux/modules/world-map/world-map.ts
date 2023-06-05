@@ -1,6 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { INITIAL_WIDTH, INITIAL_HEIGHT, INITIAL_NODE_SIZE } from '../../../utils/constants';
+import {
+  INITIAL_WIDTH,
+  INITIAL_HEIGHT,
+  INITIAL_NODE_SIZE,
+  INITIAL_END_POS,
+  INITIAL_START_POS,
+} from '../../../utils/constants';
 import { heuristic } from '../../../utils/a-start';
 
 export enum SelectionMode {
@@ -52,9 +58,9 @@ const initialState: WorldMapState = {
   height: INITIAL_HEIGHT,
   nodeSize: INITIAL_NODE_SIZE,
   selectionMode: SelectionMode.Idle,
+  start: INITIAL_START_POS,
+  end: INITIAL_END_POS,
   nodes: createGrid(INITIAL_WIDTH, INITIAL_HEIGHT),
-  start: { x: 0, y: 0 },
-  end: { x: INITIAL_WIDTH - 1, y: INITIAL_HEIGHT - 1 },
   path: [],
   neighbors: [],
   pathStatus: PathStatus.Idle,
@@ -115,12 +121,7 @@ export const worldMapSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { reducer: worldMapReducer, name: worldMapName, actions: worldMapActions } = worldMapSlice;
 
-function createGrid(
-  w: number,
-  h: number,
-  start = { x: 0, y: 0 },
-  end = { x: INITIAL_WIDTH - 1, y: INITIAL_HEIGHT - 1 }
-) {
+function createGrid(w: number, h: number, start = INITIAL_START_POS, end = INITIAL_END_POS) {
   const grid: Node[][] = [];
   for (let i = 0; i < h; i++) {
     grid[i] = [];

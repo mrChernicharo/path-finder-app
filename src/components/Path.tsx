@@ -5,7 +5,7 @@ export default function Path(props: { path: Node[] }) {
   return (
     <>
       {props.path.map(({ x, y, g }) => (
-        <Tile key={`tile-${y}-${x}`} x={x} y={y} g={g} color="dodgerblue" />
+        <Tile key={`tile-${y}-${x}`} x={x} y={y} g={g} color="orangered" />
       ))}
     </>
   );

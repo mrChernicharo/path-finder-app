@@ -5,7 +5,7 @@ export default function Neighbors(props: { neighbors: Node[] }) {
   return (
     <>
       {props.neighbors.map(({ x, y, g, blocked }) => {
-        return blocked ? null : <Tile key={`tile-${y}-${x}`} x={x} y={y} g={g} color="orange" />;
+        return blocked ? null : <Tile key={`tile-${y}-${x}`} x={x} y={y} g={g} color="rgb(30, 41, 59)" />;
       })}
     </>
   );
