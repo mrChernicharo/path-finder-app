@@ -10,13 +10,14 @@ const BTN_TEXT: Record<PathStatus, string> = {
   [PathStatus.Fail]: 'check your board and run it again!',
 };
 
-export default function ActionBtns(props: { togglePath: () => void, clear: () => void }) {
+export default function ActionBtns() {
   const pathStatus = useAppSelector(getPathStatus);
+  const { togglePath, clearPath } = usePath();
 
   return (
     <div className="flex justify-center my-5">
-      <button onClick={props.togglePath}>{BTN_TEXT[pathStatus]}</button>
-      <button onClick={props.clear}>Clear</button>
+      <button className='bg-[#cf34fd] uppercase' onClick={togglePath}>{BTN_TEXT[pathStatus]}</button>
+      <button onClick={clearPath}>clear</button>
     </div>
   );
 }

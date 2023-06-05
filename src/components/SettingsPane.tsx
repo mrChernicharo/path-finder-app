@@ -12,12 +12,13 @@ export default function SettingsPane() {
   const { setWidth, setHeight, setNodeSize } = worldMapActions;
 
   return (
-    <div>
+    <div className="">
       <div>
-        <label htmlFor="map-width">Width</label>
+        <label htmlFor="map-width">COLS</label>
         <input
           type="range"
           name="map-width"
+          className="mx-2"
           min={MIN_WIDTH}
           max={MAX_WIDTH}
           value={width}
@@ -29,10 +30,11 @@ export default function SettingsPane() {
       </div>
 
       <div>
-        <label htmlFor="map-height">Height</label>
+        <label htmlFor="map-height">ROWS</label>
         <input
           type="range"
           name="map-height"
+          className="mx-2"
           min={MIN_HEIGHT}
           max={MAX_HEIGHT}
           value={height}
@@ -44,10 +46,11 @@ export default function SettingsPane() {
       </div>
 
       <div>
-        <label htmlFor="map-node-size">node size</label>
+        <label htmlFor="map-node-size">ZOOM</label>
         <input
           type="range"
           name="map-node-size"
+          className="mx-2"
           min={MIN_NODE_SIZE}
           max={MAX_NODE_SIZE}
           value={nodeSize}
@@ -55,7 +58,6 @@ export default function SettingsPane() {
             dispatch(setNodeSize(parseInt(e.target.value)));
           }}
         />
-        <span>{nodeSize}</span>
       </div>
     </div>
   );

@@ -1,20 +1,22 @@
 import ActionBtns from './components/ActionBtns';
 import GestureDisplay from './components/GestureDisplay';
+import Header from './components/Header';
 import PathStatusDisplay from './components/PathStatusDisplay';
 import SettingsPane from './components/SettingsPane';
 import WorldMap from './components/WorldMap';
-import { usePath } from './hooks/usePath';
+
 
 function App() {
-  const { togglePath, clearPath } = usePath();
   return (
     <div>
+      <Header />
+
       <SettingsPane />
       {/* <PathStatusDisplay /> */}
       {/* <GestureDisplay /> */}
 
-        <ActionBtns togglePath={togglePath} clear={clearPath}/>
-      
+      <ActionBtns />
+
       <WorldMap />
     </div>
   );

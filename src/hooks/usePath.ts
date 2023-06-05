@@ -16,7 +16,6 @@ export function usePath() {
   const startNode = useAppSelector(getStartNode);
   const endNode = useAppSelector(getEndNode);
   const pathStatus = useAppSelector(getPathStatus);
-  // const path = useAppSelector(getPath);
 
   const { setPathStatus, setPath, setNeighbors } = worldMapActions;
   const dispatch = useAppDispatch();
@@ -25,6 +24,7 @@ export function usePath() {
 
   function drawPath() {
     clearPath();
+    dispatch(setPathStatus(PathStatus.Active));
 
     const { pathObj, closedSetObj } = generatePath(nodesGrid, startNode, endNode);
     const pathArr = Object.values(pathObj);
@@ -56,6 +56,7 @@ export function usePath() {
     dispatch(setPath([]));
     dispatch(setNeighbors([]));
     interval.current && clearInterval(interval.current);
+    dispatch(setPathStatus(PathStatus.Idle));
   }
 
   useLayoutEffect(() => {
@@ -70,10 +71,8 @@ export function usePath() {
     clearPath,
     togglePath() {
       if (pathStatus === PathStatus.Active) {
-        dispatch(setPathStatus(PathStatus.Idle));
         clearPath();
       } else {
-        dispatch(setPathStatus(PathStatus.Active));
         drawPath();
       }
     },
