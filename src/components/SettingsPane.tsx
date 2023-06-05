@@ -7,15 +7,12 @@ export default function SettingsPane() {
   const width = useAppSelector(getMapWidth);
   const height = useAppSelector(getMapHeight);
   const nodeSize = useAppSelector(getNodeSize);
-  const nodes = useAppSelector(getNodes);
   const dispatch = useAppDispatch();
 
   const { setWidth, setHeight, setNodeSize } = worldMapActions;
 
   return (
     <div>
-      <div>SettingsPane</div>
-
       <div>
         <label htmlFor="map-width">Width</label>
         <input
@@ -46,7 +43,7 @@ export default function SettingsPane() {
         <span>{height}</span>
       </div>
 
-      {/* <div>
+      <div>
         <label htmlFor="map-node-size">node size</label>
         <input
           type="range"
@@ -59,10 +56,7 @@ export default function SettingsPane() {
           }}
         />
         <span>{nodeSize}</span>
-      </div> */}
-
-
-      {/* <button onClick={() => generatePath()}>Generate Path!</button> */}
+      </div>
     </div>
   );
 }

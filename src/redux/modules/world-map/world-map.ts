@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { INITIAL_WIDTH, INITIAL_HEIGHT, INITIAL_NODE_SIZE } from '../../../utils/constants';
+import { heuristic } from '../../../utils/a-start';
 
 export enum SelectionMode {
   Idle = 'Idle',
@@ -13,17 +14,18 @@ export interface Pos {
   y: number;
 }
 
-export interface Node {
-  x: number;
-  y: number;
+export interface AScore {
+  f: number; // total cost
+  g: number; // cost from start to current point
+  h: number; // heuristic -> estimated cost function from current grid point to the goal
+}
+
+export interface Node extends Pos, AScore {
+  id: string;
   blocked: boolean;
-  // f: number; // total cost
-  // g: number; // cost from start to current point
-  // h: number; // heuristic -> estimated cost function from current grid point to the goal
   // neighbors: Node[];
   // parent: Node | undefined;
 }
-
 
 export interface WorldMapState {
   width: number;
@@ -51,11 +53,11 @@ export const worldMapSlice = createSlice({
   reducers: {
     setWidth: (state, action: PayloadAction<number>) => {
       state.width = action.payload;
-      state.nodes = createGrid(state.width, state.height);
+      state.nodes = createGrid(state.width, state.height, state.start, state.end);
     },
     setHeight: (state, action: PayloadAction<number>) => {
       state.height = action.payload;
-      state.nodes = createGrid(state.width, state.height);
+      state.nodes = createGrid(state.width, state.height, state.start, state.end);
     },
     setNodeSize: (state, action: PayloadAction<number>) => {
       state.nodeSize = action.payload;
@@ -63,13 +65,9 @@ export const worldMapSlice = createSlice({
     setSelectionMode: (state, action: PayloadAction<SelectionMode>) => {
       state.selectionMode = action.payload;
     },
-    setNodeBlock: (state, action: PayloadAction<Node>) => {
-      const { x, y, blocked } = action.payload;
-      state.nodes[y][x] = { ...state.nodes[y][x], blocked };
-    },
     updateNode: (state, action: PayloadAction<Partial<Node> & Pos>) => {
-        const { x, y, ...values } = action.payload;
-        state.nodes[y][x] = { ...state.nodes[y][x], ...values };
+      const { x, y, ...values } = action.payload;
+      state.nodes[y][x] = { ...state.nodes[y][x], ...values };
     },
     updateNodes: (state, action: PayloadAction<Array<Partial<Node> & Pos>>) => {
       for (const node of action.payload) {
@@ -90,17 +88,23 @@ export const worldMapSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { reducer: worldMapReducer, name: worldMapName, actions: worldMapActions } = worldMapSlice;
 
-function createGrid(w: number, h: number) {
+function createGrid(
+  w: number,
+  h: number,
+  start = { x: 0, y: 0 },
+  end = { x: INITIAL_WIDTH - 1, y: INITIAL_HEIGHT - 1 }
+) {
   const grid: Node[][] = [];
   for (let i = 0; i < h; i++) {
     grid[i] = [];
     for (let j = 0; j < w; j++) {
-      grid[i][j] = {
-        x: j,
-        y: i,
-        // blocked: false,
-        blocked: Math.random() > 0.8,
-      };
+      const pos = { x: j, y: i };
+      const g = heuristic(start, pos);
+      const h = heuristic(pos, end);
+      const f = g + h;
+
+      grid[i][j] = { id: `n-${i}-${j}`, blocked: false, g, h, f, ...pos };
+      // grid[i][j] = { id: `n-${i}-${j}`, blocked: Math.random() > 0.86, g, h, f, ...pos };
     }
   }
   return grid;

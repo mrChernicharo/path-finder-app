@@ -22,7 +22,7 @@ export default function Draggable(props: DraggableProps) {
 
   const { elementRef } = useDrag({
     dragStartCb(pos) {
-      console.log('drag start');
+      // console.log('drag start');
     },
     dragCb(pos) {
       // console.log('dragging');
