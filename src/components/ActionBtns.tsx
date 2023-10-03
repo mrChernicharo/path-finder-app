@@ -19,7 +19,7 @@ const BTN_COLOR: Record<PathStatus, string> = {
 
 export default function ActionBtns() {
   const pathStatus = useAppSelector(getPathStatus);
-  const { togglePath, clearPath } = usePath();
+  const { togglePath, clearPath, clearWalls } = usePath();
 
   return (
     <div className="flex justify-center my-5">
@@ -32,7 +32,8 @@ export default function ActionBtns() {
       >
         {BTN_TEXT[pathStatus]}
       </button>
-      {pathStatus === PathStatus.Done ? <button onClick={clearPath}>clear</button> : null}
+      {pathStatus === PathStatus.Done ? <button onClick={clearPath}>clear path</button> : null}
+      {pathStatus === PathStatus.Done || PathStatus.Fail ? <button onClick={clearWalls}>clear walls</button> : null}
     </div>
   );
 }

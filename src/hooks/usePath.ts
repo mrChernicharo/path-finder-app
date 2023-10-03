@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useEffect } from 'react';
 import { PathStatus, worldMapActions } from '../redux/modules/world-map/world-map';
 import {
   getNodes,
@@ -17,7 +17,7 @@ export function usePath() {
   const endNode = useAppSelector(getEndNode);
   const pathStatus = useAppSelector(getPathStatus);
 
-  const { setPathStatus, setPath, setNeighbors } = worldMapActions;
+  const { setPathStatus, setPath, setNeighbors, clearAllBlockedNodes } = worldMapActions;
   const dispatch = useAppDispatch();
 
   const interval = useRef<any>();
@@ -67,6 +67,10 @@ export function usePath() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(nodesGrid);
+  }, [nodesGrid]);
+
   return {
     clearPath,
     togglePath() {
@@ -75,6 +79,9 @@ export function usePath() {
       } else {
         drawPath();
       }
+    },
+    clearWalls() {
+      dispatch(clearAllBlockedNodes())
     },
   };
 }

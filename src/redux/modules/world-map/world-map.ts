@@ -100,6 +100,9 @@ export const worldMapSlice = createSlice({
         state.nodes[y][x] = { ...state.nodes[y][x], ...values };
       }
     },
+    clearAllBlockedNodes: (state) => {
+      state.nodes = state.nodes.map((row, i) => row.map((col) => ({ ...col, blocked: false })));
+    },
     setStart: (state, action: PayloadAction<Pos>) => {
       state.start = action.payload;
     },
