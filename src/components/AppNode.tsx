@@ -11,30 +11,40 @@ function NodeComp(props: { node: Node }) {
   const nodeSize = useAppSelector(getNodeSize);
   const dispatch = useAppDispatch();
 
-
-  const onMouseOver = (e: React.MouseEvent) => {
+  const onPointerOver = (e: React.PointerEvent) => {
+    console.log(e.buttons, (e.target as HTMLDivElement).classList);
     if (selectionMode !== SelectionMode.Active) return;
     e.buttons === 1 && dispatch(updateNode({ x: col, y: row, blocked: true }));
     e.buttons === 2 && dispatch(updateNode({ x: col, y: row, blocked: false }));
   };
 
-  const onMouseDown = (e: React.MouseEvent) => {
+  const onPointerDown = (e: React.PointerEvent) => {
     e.buttons === 1 && dispatch(updateNode({ x: col, y: row, blocked: true }));
     e.buttons === 2 && dispatch(updateNode({ x: col, y: row, blocked: false }));
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    const els = document.elementsFromPoint(e.targetTouches[0].clientX, e.targetTouches[0].clientY);
+    if (els[0].classList.contains('node')) {
+      const [row, col] = [els[0].classList[1].replace('row-', ''), els[0].classList[2].replace('col-', '')].map(Number)
+      dispatch(updateNode({ x: col, y: row, blocked: true }))
+    }
   };
 
   return (
     <div
       className={klasss(
         `node row-${row} col-${col}`,
+        'flex flex-shrink-0 gap-2 justify-center items-center touch-none',
         blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700',
-        'flex flex-shrink-0 gap-2 justify-center items-center',
         'border-slate-400 border-b-[1px] border-r-[1px] border-solid'
       )}
       data-testid={`row-${row}-col-${col}`}
       style={{ width: nodeSize, height: nodeSize }}
-      onMouseOver={onMouseOver}
-      onMouseDown={onMouseDown}
+      onPointerOver={onPointerOver}
+      onPointerDown={onPointerDown}
+      onTouchMoveCapture={onTouchMove}
+      // onTouchStart={}
     >
       <span className="pointer-events-none"></span>
     </div>
