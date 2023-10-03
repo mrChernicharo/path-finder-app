@@ -9,7 +9,7 @@ export default function NodeGrid() {
   return (
     <>
       {nodesGrid.map((row, i) => (
-        <div key={i} className="flex">
+        <div key={i} className="flex touch-none">
           {row.map((node, j) => {
             return <AppNode key={`${i}-${j}`} node={node} />;
           })}

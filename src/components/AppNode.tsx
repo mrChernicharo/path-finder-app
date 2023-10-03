@@ -33,7 +33,7 @@ function NodeComp(props: { node: Node }) {
   return (
     <div
       className={klasss(
-        `node row-${row} col-${col}`,
+        `node row-${row} col-${col} touch-none`,
         'flex flex-shrink-0 gap-2 justify-center items-center',
         blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700',
         'border-slate-400 border-b-[1px] border-r-[1px] border-solid'
@@ -42,7 +42,7 @@ function NodeComp(props: { node: Node }) {
       style={{ width: nodeSize, height: nodeSize }}
       onPointerOver={onPointerOver}
       onPointerDown={onPointerDown}
-      onTouchMoveCapture={onTouchMove}
+      onTouchMove={onTouchMove}
     >
       <span className="pointer-events-none"></span>
     </div>
