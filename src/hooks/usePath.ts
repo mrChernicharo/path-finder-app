@@ -67,10 +67,6 @@ export function usePath() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(nodesGrid);
-  }, [nodesGrid]);
-
   return {
     clearPath,
     togglePath() {

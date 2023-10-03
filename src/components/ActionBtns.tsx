@@ -22,7 +22,7 @@ export default function ActionBtns() {
   const { togglePath, clearPath, clearWalls } = usePath();
 
   return (
-    <div className="flex justify-center my-4">
+    <div className="flex justify-center flex-wrap pt-5">
       <button
         className="uppercase"
         onClick={togglePath}

@@ -10,10 +10,6 @@ export default function WorldMapWrapper(props: { children: ReactNode }) {
   const selectionMode = useAppSelector(getSelectionMode);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    console.log({ selectionMode });
-  }, [selectionMode]);
-
   return (
     <div className="w-screen pt-4">
       <div

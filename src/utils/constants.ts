@@ -1,9 +1,10 @@
 export const INITIAL_NODE_SIZE = 30;
 
 const maxX =  Math.floor(window.innerWidth / INITIAL_NODE_SIZE);
+const maxY =  Math.floor((window.innerHeight - 280) / INITIAL_NODE_SIZE);
 
 export const INITIAL_WIDTH = maxX < 30 ? maxX : 30;
-export const INITIAL_HEIGHT = 10;
+export const INITIAL_HEIGHT = maxY < 20 ? maxY : 20;
 
 
 export const MAX_WIDTH = 100;

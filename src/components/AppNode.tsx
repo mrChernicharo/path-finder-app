@@ -12,7 +12,6 @@ function NodeComp(props: { node: Node }) {
   const dispatch = useAppDispatch();
 
   const onPointerOver = (e: React.PointerEvent) => {
-    console.log(e.buttons, (e.target as HTMLDivElement).classList);
     if (selectionMode !== SelectionMode.Active) return;
     e.buttons === 1 && dispatch(updateNode({ x: col, y: row, blocked: true }));
     e.buttons === 2 && dispatch(updateNode({ x: col, y: row, blocked: false }));
@@ -44,7 +43,6 @@ function NodeComp(props: { node: Node }) {
       onPointerOver={onPointerOver}
       onPointerDown={onPointerDown}
       onTouchMoveCapture={onTouchMove}
-      // onTouchStart={}
     >
       <span className="pointer-events-none"></span>
     </div>
