@@ -15,9 +15,14 @@ function App() {
       {/* <PathStatusDisplay /> */}
       {/* <GestureDisplay /> */}
 
-      <ActionBtns />
+      <div className='flex justify-center pt-2 text-sm'>
+        interact with the board, build walls, move stars around 
+      </div>
+
 
       <WorldMap />
+
+      <ActionBtns />
     </div>
   );
 }

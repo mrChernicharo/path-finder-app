@@ -15,11 +15,10 @@ export default function WorldMapWrapper(props: { children: ReactNode }) {
   }, [selectionMode]);
 
   return (
-    <div className="w-screen">
+    <div className="w-screen pt-4">
       <div
         id={GRID_WRAPPER_ID}
-        className={klasss('w-min mx-auto relative touch-none')}
-        // className={klasss('w-min mx-auto relative')}
+        className={klasss('w-min mx-auto relative')}
         onPointerDown={(e) => {
           (e.buttons === 1 || e.buttons === 2) &&
             selectionMode === SelectionMode.Idle &&

@@ -22,7 +22,7 @@ export default function ActionBtns() {
   const { togglePath, clearPath, clearWalls } = usePath();
 
   return (
-    <div className="flex justify-center my-5">
+    <div className="flex justify-center my-4">
       <button
         className="uppercase"
         onClick={togglePath}
@@ -33,7 +33,9 @@ export default function ActionBtns() {
         {BTN_TEXT[pathStatus]}
       </button>
       {pathStatus === PathStatus.Done ? <button onClick={clearPath}>clear path</button> : null}
-      {pathStatus === PathStatus.Done || PathStatus.Fail ? <button onClick={clearWalls}>clear walls</button> : null}
+      {pathStatus === PathStatus.Done || pathStatus === PathStatus.Fail ? (
+        <button onClick={clearWalls}>clear walls</button>
+      ) : null}
     </div>
   );
 }

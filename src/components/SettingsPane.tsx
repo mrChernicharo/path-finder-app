@@ -12,7 +12,7 @@ export default function SettingsPane() {
   const { setWidth, setHeight, setNodeSize } = worldMapActions;
 
   return (
-    <div className="">
+    <div className="settings-pane pl-5 pt-2">
       <div>
         <label htmlFor="map-width">COLS</label>
         <input

@@ -35,7 +35,7 @@ function NodeComp(props: { node: Node }) {
     <div
       className={klasss(
         `node row-${row} col-${col}`,
-        'flex flex-shrink-0 gap-2 justify-center items-center touch-none',
+        'flex flex-shrink-0 gap-2 justify-center items-center',
         blocked ? 'bg-slate-300 hover:bg-slate-400' : 'bg-slate-800 hover:bg-slate-700',
         'border-slate-400 border-b-[1px] border-r-[1px] border-solid'
       )}
